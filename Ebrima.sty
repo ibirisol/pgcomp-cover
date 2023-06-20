@@ -1,0 +1,9 @@
+\ProvidesPackage{ebrima}[2023/06/17 Ibirisol Fontes Ferreira
+LaTeX package loading Ebrima TTF font]
+\RequirePackage{iftex}
+\ifLuaTeX
+\protected\def\pdfmapline {\pdfextension mapline }
+\fi
+\pdfmapfile{+embrima.map}
+\newcommand\ebrima[1]{\usefont{T1}{ebrima}{m}{n} #1 }
+\endinput

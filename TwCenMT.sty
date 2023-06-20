@@ -1,0 +1,9 @@
+\ProvidesPackage{twcenmt}[2023/06/17 Ibirisol Fontes Ferreira
+LaTeX package loading TW Cen MT TTF font]
+\usepackage{iftex}
+\ifLuaTeX
+\protected\def\pdfmapline {\pdfextension mapline }
+\fi
+\pdfmapfile{+TwCenMT.map}
+\newcommand\TwCenMT[1]{\usefont{T1}{TwCenMT}{m}{n} #1 }
+\endinput
