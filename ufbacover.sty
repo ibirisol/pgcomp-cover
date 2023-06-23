@@ -80,7 +80,9 @@ LaTeX package loading UFBA Cover Model]
 
 % new commands for betters tabular adjustments
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
-\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+%\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 \newcolumntype{J}[1]{>{\justify\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 
@@ -108,7 +110,7 @@ LaTeX package loading UFBA Cover Model]
 \definecolor{coverWhite}{cmyk}{0, 0, 0, 0}
 
 % cover art drawing
-\newcommand{\artrecta}[1][fill=coverDarkBlue, draw=none]{
+\newcommand{\artrecta}[1][fill=coverBlue, draw=none]{
     \begin{tikzpicture}[overlay]
         \filldraw[{ #1 }] (0mm,0mm) rectangle (197.24mm, 97.946mm);
     \end{tikzpicture}%
@@ -159,7 +161,7 @@ LaTeX package loading UFBA Cover Model]
     \put(0.59070796,0.18218165){\color[cmyk]{0, 0, 0, 0}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\ebrima{Universidade Federal da Bahia}\\\\\ebrima{Programa de Pós-Graduação em}\\\ebrima{Ciência da Computação}\\\\\ebrima{\CoverMonth\xspace|\CoverYear}\end{tabular}}}}%
     \put(0.49782899,0.63889314){\color[cmyk]{1.0, 0.2, 0, 0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{\CoverType\xspace|\CoverCode\xspace|\CoverYear}\end{tabular}}}}}%
     \put(0.49644488,0.5493505){\color[cmyk]{0.99, 0.96, 0.25, 0.21}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11}{1.25}\begin{tabular}[t]{C{0.69\textwidth}}\ebrima{\CoverTitle}\end{tabular}}}}}%
-    \put(0.50110506,0.20886039){\color[cmyk]{0.99, 0.96, 0.25, 0.21}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{13.39}\ebrima{\CoverAuthor}\end{tabular}}}}}%
+    \put(0.4963,0.20886039){\color[cmyk]{0.99, 0.96, 0.25, 0.21}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{12.8}\ebrima{\CoverAuthor}\end{tabular}}}}}%
   \end{picture}%
         \end{figure}
         \restoregeometry
@@ -194,7 +196,7 @@ LaTeX package loading UFBA Cover Model]
     \put(0.59070796,0.18218165){\color[cmyk]{0, 0, 0, 0}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\ebrima{Universidade Federal da Bahia}\\\\\ebrima{Programa de Pós-Graduação em}\\\ebrima{Ciência da Computação}\\\\\ebrima{\CoverMonth\xspace|\CoverYear}\end{tabular}}}}%
     \put(0.49782899,0.63889314){\color[cmyk]{1.0, 0.2, 0, 0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{\CoverType\xspace|\CoverCode\xspace|\CoverYear}\end{tabular}}}}}%
     \put(0.49644488,0.5493505){\color[cmyk]{0.99, 0.96, 0.25, 0.21}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11}{1.25}\begin{tabular}[t]{C{0.69\textwidth}}\ebrima{\CoverTitle}\end{tabular}}}}}%
-    \put(0.50110506,0.20886039){\color[cmyk]{0.99, 0.96, 0.25, 0.21}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{13.39}\ebrima{\CoverAuthor}\end{tabular}}}}}%
+    \put(0.4963,0.20886039){\color[cmyk]{0.99, 0.96, 0.25, 0.21}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{12.8}\ebrima{\CoverAuthor}\end{tabular}}}}}%
   \end{picture}%
         \end{figure}
         \restoregeometry
@@ -232,8 +234,8 @@ LaTeX package loading UFBA Cover Model]
     \put(0.59070796,0.21391464){\color{coverBlueLight}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.73\textwidth}}\fontsize{18}{1.25}\ebrima{Tese de Doutorado}\end{tabular}}}}%
     \put(0.59070796,0.18218165){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\ebrima{Universidade Federal da Bahia}\\\\\ebrima{Programa de Pós-Graduação em}\\\ebrima{Ciência da Computação}\\\\\ebrima{Fevereiro | 2022}\end{tabular}}}}%
     \put(0.49782899,0.63889314){\color{coverBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{DSC | 027 | 2022}\end{tabular}}}}}%
-    \put(0.49644488,0.5493505){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11.054}{1.25}\begin{tabular}[t]{C{0.69\textwidth}}\ebrima{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}}%
-    \put(0.50110506,0.20886039){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{13.39}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}}%
+    \put(0.49644488,0.5493505){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.69\textwidth}}\fontsize{11.054}{1.25}\ebrima{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}}%
+    \put(0.4963,0.20886039){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{12.8}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}}%
   \end{picture}%
         \end{figure}
         \restoregeometry
@@ -262,7 +264,7 @@ LaTeX package loading UFBA Cover Model]
     \put(0.59070796,0.18218165){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\ebrima{Universidade Federal da Bahia}\\\\\ebrima{Programa de Pós-Graduação em}\\\ebrima{Ciência da Computação}\\\\\ebrima{Fevereiro | 2022}\end{tabular}}}}%
     \put(0.49782899,0.63889314){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{DSC | 027 | 2022}\end{tabular}}}}}%
     \put(0.49644488,0.5493505){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11.054}{1.25}\begin{tabular}[t]{C{0.69\textwidth}}\ebrima{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}}%
-    \put(0.50110506,0.20886039){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{13.39}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}}%
+    \put(0.4963,0.20886039){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{12.8}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}}%
     \put(-0.0025,0.4847){\artrecta[fill=red, draw=none, fill opacity=0.5]}
     \put(0.5092,0){\artrectb[fill=red, draw=none, fill opacity=0.5]}
     \put(0.4332,0){\artrectc[fill=red, draw=none, fill opacity=0.5]}
