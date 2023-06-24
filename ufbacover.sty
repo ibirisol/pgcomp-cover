@@ -31,12 +31,14 @@ LaTeX package loading UFBA Cover Model]
 \RequirePackage{geometry}
 \RequirePackage{graphicx}
 \RequirePackage{xcolor}
-\RequirePackage{afterpage}
 \RequirePackage{array}
 \RequirePackage{ragged2e}
 \RequirePackage{xspace}
 \RequirePackage{kvoptions}
 \RequirePackage{tikz}
+\RequirePackage[medium,semibold]{montserrat}
+
+\newcommand\montserrat[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
 
 % options
 \DeclareStringOption[452mm]{coverwidth}[452mm]
@@ -92,7 +94,7 @@ LaTeX package loading UFBA Cover Model]
 \def\svgscale{\CoverScale}
 
 \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{1281.25982666bp}%
+    \setlength{\unitlength}{1mm}%
     \ifx\svgscale\undefined%
         \relax%
     \else%
@@ -128,10 +130,25 @@ LaTeX package loading UFBA Cover Model]
     \end{tikzpicture}%
 }
 
-\newcommand{\artline}[1][fill=coverBlue, draw=none]{
-    \begin{tikzpicture}[overlay]
-        \filldraw[{ #1 }] (0mm,0mm) rectangle (70.000mm, 45.553mm);
-    \end{tikzpicture}%
+\newcommand{\artlines}{
+    % left top
+    \put(0.02213,0.70132751){\color{white}\line(0,-1){0.0177}}
+    \put(0,0.67919751){\color{white}\line(1,0){0.0177}}
+    % left bottom
+    \put(0.02213,0){\line(0,1){0.0177}}
+    \put(0,0.02213){\line(1,0){0.0177}}
+    % center top
+    \put(0.4867,0.70132751){\line(0,-1){0.0177}}
+    \put(0.5128,0.70132751){\line(0,-1){0.0177}}
+    % center bottom
+    \put(0.4867,0){\color{white}\line(0,1){0.0177}}
+    \put(0.5128,0){\color{white}\line(0,1){0.0177}}
+    % right top
+    \put(0.97736,0.70132751){\line(0,-1){0.0177}}
+    \put(1,0.6788){\line(-1,0){0.0177}}
+    % right bottom
+    \put(0.97736,0){\color{white}\line(0,1){0.0177}}
+    \put(1,0.0218){\color{white}\line(-1,0){0.0177}}
 }
 
 \newcommand{\artlogo}{
@@ -185,6 +202,8 @@ LaTeX package loading UFBA Cover Model]
     \put(0.5092,0){\artrectb}
     \put(0.4332,0){\artrectc}
     \put(0.5357,0.037){\artlogo}
+    % add crop lines
+    \artlines
     % cover text
     \put(0.59070796,0.57991487){\color[cmyk]{0.99, 0.96, 0.25, 0.21}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{36}{39.25}\TwCenMT{\CoverTitle}\end{tabular}}}}%
     \put(0.59070796,0.33259119){\color[cmyk]{0, 0, 0, 0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{25}{1.25}\ebrima{
@@ -220,12 +239,8 @@ LaTeX package loading UFBA Cover Model]
     \put(0.5092,0){\artrectb}
     \put(0.4332,0){\artrectc}
     \put(0.5357,0.037){\artlogo}
-    % crop lines
-    %\put(0,0.0222){\linethickness{0.3mm}\line(1,0){8mm}}
-    %\put(0.0222,0){\linethickness{0.3mm}\line(0,1){8mm}}
-    %\put(0,0.0222){\linethickness{0.3mm}\line(1,0){8mm}}
-    %\put(0.0222,0){\linethickness{0.3mm}\line(0,1){8mm}}
-    % cover text
+    % add crop lines
+    \artlines
     \put(0.59070796,0.57991487){\color{coverDarkBlue}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{36.15}{39.25}\TwCenMT{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}%
     \put(0.59070796,0.33259119){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{25.13}{1.25}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}%
     \put(0.12603759,0.46617283){\color{coverDarkBlueLight}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{J{0.65\textwidth}}\fontsize{10}{13.355}\ebrima{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}\end{tabular}}}}%
@@ -265,10 +280,12 @@ LaTeX package loading UFBA Cover Model]
     \put(0.49782899,0.63889314){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{DSC | 027 | 2022}\end{tabular}}}}}%
     \put(0.49644488,0.5493505){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11.054}{1.25}\begin{tabular}[t]{C{0.69\textwidth}}\ebrima{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}}%
     \put(0.4963,0.20886039){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{12.8}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}}%
-    %\put(0,0.4847){\setlength{\fboxrule}{0pt}\fcolorbox{black}{red}{\makebox(0.6,0.1)[l]{\strut}}}
-    \put(-0.0025,0.4847){\artrecta[fill=red, draw=none, fill opacity=0.5]}
+    \put(0,0.48695){\setlength{\fboxrule}{0pt}\fcolorbox{black}{red}{\makebox(0.4317,0.212)[l]{\strut}}}
+    %\put(-0.0025,0.4847){\artrecta[fill=red, draw=none, fill opacity=0.5]}
     \put(0.5092,0){\artrectb[fill=red, draw=none, fill opacity=0.5]}
     \put(0.4332,0){\artrectc[fill=red, draw=none, fill opacity=0.5]}
+    % add crop lines
+    \artlines
   \end{picture}%
         \end{figure}
         \restoregeometry
