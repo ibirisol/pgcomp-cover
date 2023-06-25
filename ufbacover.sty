@@ -1,29 +1,6 @@
-%% Creator: Inkscape 1.2.2 (b0a8486541, 2022-12-01), www.inkscape.org
-%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'CAPA_FINAL-modelo_latex.pdf' (pdf, eps, ps)
-%%
-%% To include the image in your LaTeX document, write
-%%   \input{<filename>.pdf_tex}
-%%  instead of
-%%   \includegraphics{<filename>.pdf}
-%% To scale the image, write
-%%   \def\svgwidth{<desired width>}
-%%   \input{<filename>.pdf_tex}
-%%  instead of
-%%   \includegraphics[width=<desired width>]{<filename>.pdf}
-%%
-%% Images with a different path to the parent latex file can
-%% be accessed with the `import' package (which may need to be
-%% installed) using
-%%   \usepackage{import}
-%% in the preamble, and then including the image with
-%%   \import{<path to file>}{<filename>.pdf_tex}
-%% Alternatively, one can specify
-%%   \graphicspath{{<path to file>/}}
-%% 
-%% For more information, please see info/svg-inkscape on CTAN:
-%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
-%%
+%%%
+% ufbacover - allow drawing the computer.ufba.br thesis cover using LaTeX
+%%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ufbacover}[2023/06/20 Ibirisol Fontes Ferreira
 LaTeX package loading UFBA Cover Model]
@@ -36,9 +13,12 @@ LaTeX package loading UFBA Cover Model]
 \RequirePackage{xspace}
 \RequirePackage{kvoptions}
 \RequirePackage{transparent}
-\RequirePackage[medium,semibold]{montserrat}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{ebrima}
+\RequirePackage{twcenmt}
+%\RequirePackage[medium,semibold]{montserrat}
 
-\newcommand\montserrat[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
+%\newcommand\montserrat[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
 
 % options
 \DeclareStringOption[452mm]{coverwidth}[452mm]
@@ -67,13 +47,29 @@ LaTeX package loading UFBA Cover Model]
 \newcommand{\coverabstract}[1]{ \def\CoverAbstract{ #1 } }
 \newcommand{\coverkeywords}[1]{ \def\CoverKeywords{ #1 } }
 
-% new commands from inkscape
+% adapted commands from inkscape
 \providecommand\color[2][]{%
-  \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+  \errmessage{Color is used for the text and cover art, but the package 'color.sty' is not loaded}%
   \renewcommand\color[2][]{}%
 }%
+\providecommand\definecolor[3][]{%
+  \errmessage{Defined color is used for the text and cover art, but the package 'xcolor.sty' is not loaded}%
+  \renewcommand\definecolor[3]{}{}{}%
+}%
 \providecommand\transparent[1]{%
-  \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+  \errmessage{Transparency is used (non-zero) for the cover art, but the package 'transparent.sty' is not loaded}%
+  \renewcommand\transparent[1]{}%
+}%
+\providecommand\Ebrima[1]{%
+  \errmessage{Font Ebrima is used for the cover art, but the package 'ebrima.sty' is not loaded}%
+  \renewcommand\ebrima[1]{}%
+}%
+\providecommand\TwCenMT[1]{%
+  \errmessage{Font Tw Cen TM is used for the cover art, but the package 'TwCenTM.sty' is not loaded}%
+  \renewcommand\TwCenMT[1]{}%
+}%
+\providecommand\transparent[1]{%
+  \errmessage{Transparency is used (non-zero) for the cover art, but the package 'transparent.sty' is not loaded}%
   \renewcommand\transparent[1]{}%
 }%
 \providecommand\rotatebox[2]{#2}%
