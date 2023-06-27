@@ -16,9 +16,16 @@ LaTeX package loading UFBA Cover Model]
 \RequirePackage[T1]{fontenc}
 \RequirePackage{ebrima}
 \RequirePackage{twcenmt}
-%\RequirePackage[medium,semibold]{montserrat}
+\RequirePackage[medium,semibold]{montserrat}
+\RequirePackage[light,semibold]{noto}
+\RequirePackage{opensans}
 
-%\newcommand\montserrat[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
+\newcommand\montserratfont[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
+\newcommand\notofont[1]{{\fontfamily{NotoSans-TOsF}\selectfont #1}}
+\newcommand\opensansfont[1]{{\fontfamily{opensans-TOsF}\fontseries{cl}\selectfont #1}}
+
+\newcommand\headerfont[1]{\TwCenMT{#1}}
+\newcommand\bodyfont[1]{\ebrima{#1}}
 
 % options
 \DeclareStringOption[452mm]{coverwidth}[452mm]
@@ -33,19 +40,19 @@ LaTeX package loading UFBA Cover Model]
 \newcommand{\CoverHeight}{\ufbacover@coverheight}
 \newcommand{\CoverScale}{\ufbacover@coverscale}
 \newcommand{\CoverArt}{\ufbacover@coverart}
-\newcommand{\coverwidth}[1]{ \def\CoverWidth{ #1 } }
-\newcommand{\coverheight}[1]{ \def\CoverHeight{ #1 } }
-\newcommand{\coverscale}[1]{ \def\CoverScale{ #1 } }
-\newcommand{\coverart}[1]{ \def\CoverArt{ #1 } }
-\newcommand{\covertype}[1]{ \def\CoverType{ #1 } }
-\newcommand{\covercode}[1]{ \def\CoverCode{ #1 } }
-\newcommand{\covermonth}[1]{ \def\CoverMonth{ #1 } }
-\newcommand{\coveryear}[1]{ \def\CoverYear{ #1 } }
-\newcommand{\coverdocumenttype}[1]{ \def\CoverDocumentType{ #1 } }
-\newcommand{\covertitle}[1]{ \def\CoverTitle{ #1 } }
-\newcommand{\coverauthor}[1]{ \def\CoverAuthor{ #1 } }
-\newcommand{\coverabstract}[1]{ \def\CoverAbstract{ #1 } }
-\newcommand{\coverkeywords}[1]{ \def\CoverKeywords{ #1 } }
+\newcommand{\coverwidth}[1]{\def\CoverWidth{#1}}
+\newcommand{\coverheight}[1]{\def\CoverHeight{#1}}
+\newcommand{\coverscale}[1]{\def\CoverScale{#1}}
+\newcommand{\coverart}[1]{\def\CoverArt{#1}}
+\newcommand{\covertype}[1]{\def\CoverType{#1}}
+\newcommand{\covercode}[1]{\def\CoverCode{#1}}
+\newcommand{\covermonth}[1]{\def\CoverMonth{#1}}
+\newcommand{\coveryear}[1]{\def\CoverYear{#1}}
+\newcommand{\coverdocumenttype}[1]{\def\CoverDocumentType{#1}}
+\newcommand{\covertitle}[1]{\def\CoverTitle{#1}}
+\newcommand{\coverauthor}[1]{\def\CoverAuthor{#1}}
+\newcommand{\coverabstract}[1]{\def\CoverAbstract{#1}}
+\newcommand{\coverkeywords}[1]{\def\CoverKeywords{#1}}
 
 % adapted commands from inkscape
 \providecommand\color[2][]{%
@@ -144,6 +151,61 @@ LaTeX package loading UFBA Cover Model]
     \put(0.5357,0.037){\includegraphics[width=14.76mm]{brasao_ufba.pdf}}
 }
 
+% front cover text commands
+\newcommand{\artcoverfronttitle}[4][coverDarkBlue]{
+    \put(0.59070796,0.57991487){\color{#1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{#2}{#3}\headerfont{#4}\end{tabular}}}}
+}
+
+\newcommand{\artcoverfrontauthor}[4][coverWhite]{
+    \put(0.59070796,0.33259119){\color{#1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\end{tabular}}}}
+}
+
+\newcommand{\artcoverfrontdocumenttype}[4][coverBlueLight]{
+    \put(0.59070796,0.21391464){\color{#1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.73\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\end{tabular}}}}
+}
+
+\newcommand{\CoverInfo}{
+    \bodyfont{Universidade Federal da Bahia}\\\\\bodyfont{Programa de Pós-Graduação em}\\\bodyfont{Ciência da Computação}\\\\\bodyfont{\CoverMonth\xspace|\xspace\CoverYear}
+}
+
+\newcommand{\artcoverfrontinfo}[4][coverWhite]{
+    \put(0.59070796,0.18218165){\color{#1}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{#2}{#3}\begin{tabular}[t]{R{0.73\textwidth}} #4 \end{tabular}}}}
+}
+
+% back cover text commands
+\newcommand{\PGCOMPAddressInfo}{
+    \bodyfont{PGCOMP - Programa de Pós-Graduação em Ciência da Computação}\\\bodyfont{Universidade Federal da Bahia (UFBA)}\\\bodyfont{Av. Milton Santos, s/n - Ondina}\\\bodyfont{Salvador, BA, Brasil, 40170-110}\\\\\bodyfont{https://pgcomp.ufba.br}\\\bodyfont{pgcomp@ufba.br}
+}
+
+\newcommand{\artcoverbackaddressinfo}[4][coverWhite]{
+    \put(0.12603759,0.6124423){\color{#1}\makebox(0,0)[lt]{\lineheight{1.466}\smash{\fontsize{#2}{#3}\begin{tabular}[t]{l}#4\end{tabular}}}}
+}
+
+\newcommand{\artcoverbackabstractkeywords}[5][coverDarkBlueLight]{
+    \put(0.12603759,0.46617283){\color{#1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{J{0.65\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\newline\bodyfont{#5}\end{tabular}}}}
+}
+
+% spine text commands
+\newcommand{\artcoverspineinstitution}[3][coverWhite]{
+    \put(0.4950728,0.07637041){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{#2}{#3}\bodyfont{UFBA}\end{tabular}}}}}
+}
+
+\newcommand{\CoverSpineInfo}{
+    \CoverType\xspace|\xspace\CoverCode\xspace|\xspace\CoverYear
+}
+
+\newcommand{\artcoverspineinfo}[4][coverBlue]{
+    \put(0.49782899,0.63889314){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{#2}{#3}\begin{tabular}[t]{l}\bodyfont{#4}\end{tabular}}}}}
+}
+
+\newcommand{\artcoverspinetitle}[4][coverDarkBlue]{
+    \put(0.49644488,0.5493505){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{#2}{#3}\begin{tabular}[t]{C{0.69\textwidth}}\bodyfont{#4}\end{tabular}}}}}
+}
+
+\newcommand{\artcoverspineauthor}[4][coverDarkBlue]{
+    \put(0.4963,0.20886039){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\end{tabular}}}}}
+}
+
 % cover default command
 \newcommand{\newcover}{
     %% cover art with latex
@@ -153,22 +215,24 @@ LaTeX package loading UFBA Cover Model]
         \newgeometry{margin=0mm}
         \eject \pdfpagewidth=\CoverWidth \pdfpageheight=\CoverHeight
         \begin{figure}
-  \begin{picture}(1,0.70132751)%
-    \lineheight{1}%
-    \setlength\tabcolsep{0pt}%
-    \put(0,0){\includegraphics[width=\unitlength,page=1]{\CoverArt}}%
-    \put(0.59070796,0.57991487){\color{coverDarkBlue}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{36}{39.25}\TwCenMT{\CoverTitle}\end{tabular}}}}%
-    \put(0.59070796,0.33259119){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{25}{1.25}\ebrima{
- \CoverAuthor}\end{tabular}}}}%
-    \put(0.12603759,0.46617283){\color{coverDarkBlueLight}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{J{0.65\textwidth}}\fontsize{10}{13.355}\ebrima{\CoverAbstract\newline\CoverKeywords}\end{tabular}}}}%
-    \put(0.12603759,0.6124423){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{1.466}\smash{\fontsize{11}{1.25}\begin{tabular}[t]{l}\ebrima{PGCOMP - Programa de Pós-Graduação em Ciência da Computação}\\\ebrima{Universidade Federal da Bahia (UFBA)}\\\ebrima{Av. Milton Santos, s/n - Ondina}\\\ebrima{Salvador, BA, Brasil, 40170-110}\\\\\ebrima{https://pgcomp.ufba.br}\\\ebrima{pgcomp@ufba.br}\end{tabular}}}}%
-    \put(0.4950728,0.07637041){\color{coverWhite}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{14}{1.25}\ebrima{UFBA}\end{tabular}}}}}%
-    \put(0.59070796,0.21391464){\color{coverBlueLight}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.73\textwidth}}\fontsize{18}{1.25}\ebrima{\CoverDocumentType}\end{tabular}}}}%
-    \put(0.59070796,0.18218165){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\ebrima{Universidade Federal da Bahia}\\\\\ebrima{Programa de Pós-Graduação em}\\\ebrima{Ciência da Computação}\\\\\ebrima{\CoverMonth\xspace|\CoverYear}\end{tabular}}}}%
-    \put(0.49782899,0.63889314){\color{coverBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{\CoverType\xspace|\CoverCode\xspace|\CoverYear}\end{tabular}}}}}%
-    \put(0.49644488,0.5493505){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11}{1.25}\begin{tabular}[t]{C{0.69\textwidth}}\ebrima{\CoverTitle}\end{tabular}}}}}%
-    \put(0.4963,0.20886039){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{12.8}\ebrima{\CoverAuthor}\end{tabular}}}}}%
-  \end{picture}%
+            \begin{picture}(1,0.70132751)%
+                \lineheight{1}%
+                \setlength\tabcolsep{0pt}%
+                % call front cover elements
+                \put(0,0){\includegraphics[width=\unitlength,page=1]{\CoverArt}}%
+                \artcoverfronttitle{36}{39.25}{\CoverTitle}
+                \artcoverfrontauthor{25}{1.25}{\CoverAuthor}
+                \artcoverfrontdocumenttype{18}{1.25}{\CoverDocumentType}
+                \artcoverfrontinfo{15}{1.25}{\CoverInfo}
+                % call back cover elements
+                \artcoverbackabstractkeywords{10}{13.355}{\CoverAbstract}{\CoverKeywords}
+                \artcoverbackaddressinfo{11}{1.25}{\PGCOMPAddressInfo}
+                % call spine elements
+                \artcoverspineinstitution{14}{1.25}
+                \artcoverspineinfo{12}{1.25}{\CoverSpineInfo}
+                \artcoverspinetitle{11}{1.25}{\CoverTitle}
+                \artcoverspineauthor{12}{12.8}{\CoverAuthor}
+            \end{picture}
         \end{figure}
         \restoregeometry
     }
@@ -183,29 +247,32 @@ LaTeX package loading UFBA Cover Model]
         \newgeometry{margin=0mm}
         \eject \pdfpagewidth=\CoverWidth \pdfpageheight=\CoverHeight
         \begin{figure}
-  \begin{picture}(1,0.70132751)%
-    \lineheight{1}%
-    \setlength\tabcolsep{0pt}%
-    % cover background art
-    \artrecta
-    \artrectb
-    \artrectc
-    \artlogo
-    % add crop lines
-    \artlines
-    % cover text
-    \put(0.59070796,0.57991487){\color{coverDarkBlue}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{36}{39.25}\TwCenMT{\CoverTitle}\end{tabular}}}}%
-    \put(0.59070796,0.33259119){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{25}{1.25}\ebrima{
- \CoverAuthor}\end{tabular}}}}%
-    \put(0.12603759,0.46617283){\color{coverDarkBlueLight}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{J{0.65\textwidth}}\fontsize{10}{13.355}\ebrima{\CoverAbstract\newline\CoverKeywords}\end{tabular}}}}%
-    \put(0.12603759,0.6124423){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{1.466}\smash{\fontsize{11}{1.25}\begin{tabular}[t]{l}\ebrima{PGCOMP - Programa de Pós-Graduação em Ciência da Computação}\\\ebrima{Universidade Federal da Bahia (UFBA)}\\\ebrima{Av. Milton Santos, s/n - Ondina}\\\ebrima{Salvador, BA, Brasil, 40170-110}\\\\\ebrima{https://pgcomp.ufba.br}\\\ebrima{pgcomp@ufba.br}\end{tabular}}}}%
-    \put(0.4950728,0.07637041){\color{coverWhite}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{14}{1.25}\ebrima{UFBA}\end{tabular}}}}}%
-    \put(0.59070796,0.21391464){\color{coverBlueLight}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.73\textwidth}}\fontsize{18}{1.25}\ebrima{\CoverDocumentType}\end{tabular}}}}%
-    \put(0.59070796,0.18218165){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\ebrima{Universidade Federal da Bahia}\\\\\ebrima{Programa de Pós-Graduação em}\\\ebrima{Ciência da Computação}\\\\\ebrima{\CoverMonth\xspace|\CoverYear}\end{tabular}}}}%
-    \put(0.49782899,0.63889314){\color{coverBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{\CoverType\xspace|\CoverCode\xspace|\CoverYear}\end{tabular}}}}}%
-    \put(0.49644488,0.5493505){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11}{1.25}\begin{tabular}[t]{C{0.69\textwidth}}\ebrima{\CoverTitle}\end{tabular}}}}}%
-    \put(0.4963,0.20886039){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{12.8}\ebrima{\CoverAuthor}\end{tabular}}}}}%
-  \end{picture}%
+            \begin{picture}(1,0.70132751)%
+                \lineheight{1}%
+                \setlength\tabcolsep{0pt}%
+                % cover background art
+                \artrecta
+                \artrectb
+                \artrectc
+                \artlogo
+                % add crop lines
+                \artlines
+                % cover text
+                % call front cover elements
+                \put(0,0){\includegraphics[width=\unitlength,page=1]{\CoverArt}}%
+                \artcoverfronttitle{36}{39.25}{\CoverTitle}
+                \artcoverfrontauthor{25}{1.25}{\CoverAuthor}
+                \artcoverfrontdocumenttype{18}{1.25}{\CoverDocumentType}
+                \artcoverfrontinfo{15}{1.25}{\CoverInfo}
+                % call back cover elements
+                \artcoverbackabstractkeywords{10}{13.355}{\CoverAbstract}{\CoverKeywords}
+                \artcoverbackaddressinfo{11}{1.25}{\PGCOMPAddressInfo}
+                % call spine elements
+                \artcoverspineinstitution{14}{1.25}
+                \artcoverspineinfo{12}{1.25}{\CoverSpineInfo}
+                \artcoverspinetitle{11}{1.25}{\CoverTitle}
+                \artcoverspineauthor{12}{12.8}{\CoverAuthor}
+            \end{picture}
         \end{figure}
         \restoregeometry
     }
@@ -220,27 +287,32 @@ LaTeX package loading UFBA Cover Model]
         \newgeometry{margin=0mm}
         \eject \pdfpagewidth=\CoverWidth \pdfpageheight=\CoverHeight
         \begin{figure}
-  \begin{picture}(1,0.70132751)%
-    \lineheight{1}%
-    \setlength\tabcolsep{0pt}%
-    % cover background art
-    \artrecta
-    \artrectb
-    \artrectc
-    \artlogo
-    % add crop lines
-    \artlines
-    \put(0.59070796,0.57991487){\color{coverDarkBlue}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{36.15}{39.25}\TwCenMT{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}%
-    \put(0.59070796,0.33259119){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{25.13}{1.25}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}%
-    \put(0.12603759,0.46617283){\color{coverDarkBlueLight}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{J{0.65\textwidth}}\fontsize{10}{13.355}\ebrima{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}\end{tabular}}}}%
-    \put(0.12603759,0.6124423){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{1.466}\smash{\fontsize{11.054}{1.25}\begin{tabular}[t]{l}\ebrima{PGCOMP - Programa de Pós-Graduação em Ciência da Computação}\\\ebrima{Universidade Federal da Bahia (UFBA)}\\\ebrima{Av. Milton Santos, s/n - Ondina}\\\ebrima{Salvador, BA, Brasil, 40170-110}\\\\\ebrima{https://pgcomp.ufba.br}\\\ebrima{pgcomp@ufba.br}\end{tabular}}}}%
-    \put(0.4950728,0.07637041){\color{coverWhite}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{14}{1.25}\ebrima{UFBA}\end{tabular}}}}}%
-    \put(0.59070796,0.21391464){\color{coverBlueLight}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.73\textwidth}}\fontsize{18}{1.25}\ebrima{Tese de Doutorado}\end{tabular}}}}%
-    \put(0.59070796,0.18218165){\color{coverWhite}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\ebrima{Universidade Federal da Bahia}\\\\\ebrima{Programa de Pós-Graduação em}\\\ebrima{Ciência da Computação}\\\\\ebrima{Fevereiro | 2022}\end{tabular}}}}%
-    \put(0.49782899,0.63889314){\color{coverBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{DSC | 027 | 2022}\end{tabular}}}}}%
-    \put(0.49644488,0.5493505){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.69\textwidth}}\fontsize{11.054}{1.25}\ebrima{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}}%
-    \put(0.4963,0.20886039){\color{coverDarkBlue}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.225\textwidth}}\fontsize{12}{12.8}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}}%
-  \end{picture}%
+            \begin{picture}(1,0.70132751)%
+                \lineheight{1}%
+                \setlength\tabcolsep{0pt}%
+                % cover background art
+                \artrecta
+                \artrectb
+                \artrectc
+                \artlogo
+                % add crop lines
+                \artlines
+                % cover text
+                % call front cover elements
+                \put(0,0){\includegraphics[width=\unitlength,page=1]{\CoverArt}}%
+                \artcoverfronttitle{36}{39.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}
+                \artcoverfrontauthor{25}{1.25}{André Brasil Vieira Wyzykowski}
+                \artcoverfrontdocumenttype{18}{1.25}{Tese de Doutorado}
+                \artcoverfrontinfo{15}{1.25}{\bodyfont{Universidade Federal da Bahia}\\\\\bodyfont{Programa de Pós-Graduação em}\\\bodyfont{Ciência da Computação}\\\\\bodyfont{Fevereiro | 2022}}
+                % call back cover elements
+                \artcoverbackabstractkeywords{10}{13.355}{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}{}
+                \artcoverbackaddressinfo{11}{1.25}{\PGCOMPAddressInfo}
+                % call spine elements
+                \artcoverspineinstitution{14}{1.25}
+                \artcoverspineinfo{12}{1.25}{\bodyfont{DSC | 027 | 2022}}
+                \artcoverspinetitle{11}{1.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}
+                \artcoverspineauthor{12}{12.8}{André Brasil Vieira Wyzykowski}
+            \end{picture}
         \end{figure}
         \restoregeometry
     }
@@ -259,16 +331,16 @@ LaTeX package loading UFBA Cover Model]
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{covermodel-art-croped-cmyk.pdf}}
-    \put(0.59070796,0.57991487){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{36.15}{39.25}\TwCenMT{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}%
-    \put(0.59070796,0.33259119){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{25.13}{1.25}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}%
-    \put(0.12603759,0.46617283){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{J{0.65\textwidth}}\fontsize{10}{13.355}\ebrima{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}\end{tabular}}}}%
-    \put(0.12603759,0.6124423){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.466}\smash{\fontsize{11.054}{1.25}\begin{tabular}[t]{l}\ebrima{PGCOMP - Programa de Pós-Graduação em Ciência da Computação}\\\ebrima{Universidade Federal da Bahia (UFBA)}\\\ebrima{Av. Milton Santos, s/n - Ondina}\\\ebrima{Salvador, BA, Brasil, 40170-110}\\\\\ebrima{https://pgcomp.ufba.br}\\\ebrima{pgcomp@ufba.br}\end{tabular}}}}%
-    \put(0.4950728,0.07637041){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{14}{1.25}\ebrima{UFBA}\end{tabular}}}}}%
-    \put(0.59070796,0.21391464){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.73\textwidth}}\fontsize{18}{1.25}\ebrima{Tese de Doutorado}\end{tabular}}}}%
-    \put(0.59070796,0.18218165){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\ebrima{Universidade Federal da Bahia}\\\\\ebrima{Programa de Pós-Graduação em}\\\ebrima{Ciência da Computação}\\\\\ebrima{Fevereiro | 2022}\end{tabular}}}}%
-    \put(0.49782899,0.63889314){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\ebrima{DSC | 027 | 2022}\end{tabular}}}}}%
-    \put(0.49644488,0.5493505){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11.054}{1.25}\begin{tabular}[t]{M{0.69\textwidth}}\ebrima{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}}%
-    \put(0.4963,0.20886039){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{12.8}\begin{tabular}[t]{M{0.225\textwidth}}\ebrima{André Brasil Vieira Wyzykowski}\end{tabular}}}}}%
+    \put(0.59070796,0.57991487){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{36.15}{39.25}\headerfont{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}%
+    \put(0.59070796,0.33259119){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.73\textwidth}}\fontsize{25.13}{1.25}\bodyfont{André Brasil Vieira Wyzykowski}\end{tabular}}}}%
+    \put(0.12603759,0.46617283){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{J{0.65\textwidth}}\fontsize{10}{13.355}\bodyfont{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}\end{tabular}}}}%
+    \put(0.12603759,0.6124423){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.466}\smash{\fontsize{11.054}{1.25}\begin{tabular}[t]{l}\bodyfont{PGCOMP - Programa de Pós-Graduação em Ciência da Computação}\\\bodyfont{Universidade Federal da Bahia (UFBA)}\\\bodyfont{Av. Milton Santos, s/n - Ondina}\\\bodyfont{Salvador, BA, Brasil, 40170-110}\\\\\bodyfont{https://pgcomp.ufba.br}\\\bodyfont{pgcomp@ufba.br}\end{tabular}}}}%
+    \put(0.4950728,0.07637041){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{14}{1.25}\bodyfont{UFBA}\end{tabular}}}}}%
+    \put(0.59070796,0.21391464){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.73\textwidth}}\fontsize{18}{1.25}\bodyfont{Tese de Doutorado}\end{tabular}}}}%
+    \put(0.59070796,0.18218165){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{15}{1.25}\begin{tabular}[t]{R{0.73\textwidth}}\bodyfont{Universidade Federal da Bahia}\\\\\bodyfont{Programa de Pós-Graduação em}\\\bodyfont{Ciência da Computação}\\\\\bodyfont{Fevereiro | 2022}\end{tabular}}}}%
+    \put(0.49782899,0.63889314){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{1.25}\begin{tabular}[t]{l}\bodyfont{DSC | 027 | 2022}\end{tabular}}}}}%
+    \put(0.49644488,0.5493505){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{11.054}{1.25}\begin{tabular}[t]{M{0.69\textwidth}}\bodyfont{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}\end{tabular}}}}}%
+    \put(0.4963,0.20886039){\color[rgb]{0,0,0}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\fontsize{12}{12.8}\begin{tabular}[t]{M{0.225\textwidth}}\bodyfont{André Brasil Vieira Wyzykowski}\end{tabular}}}}}%
     \put(0,0.48695){\transparent{0.4}\colorbox{red}{\makebox(0.4317,0.212){}}}
     \put(0,0.48695){\transparent{0.4}\colorbox{red}{\makebox(0.4317,0.212){}}}
     \put(0.5118,0){\transparent{0.4}\colorbox{red}{\makebox(0.4832,0.43452){}}}
