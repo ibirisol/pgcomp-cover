@@ -3,7 +3,7 @@
 %%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ufbacover}[2023/06/20 Ibirisol Fontes Ferreira
-LaTeX package loading UFBA Cover Model]
+LaTeX package loading UFBA Cover Model with sketch commands]
 \RequirePackage{afterpage}
 \RequirePackage{geometry}
 \RequirePackage{graphicx}
@@ -12,10 +12,7 @@ LaTeX package loading UFBA Cover Model]
 \RequirePackage{ragged2e}
 \RequirePackage{xspace}
 \RequirePackage{kvoptions}
-\RequirePackage{transparent}
 \RequirePackage[T1]{fontenc}
-\RequirePackage{ebrima}
-\RequirePackage{twcenmt}
 \RequirePackage[medium,semibold]{montserrat}
 \RequirePackage[regular,semibold]{noto}
 
@@ -29,7 +26,6 @@ LaTeX package loading UFBA Cover Model]
 \DeclareStringOption[452mm]{coverwidth}[452mm]
 \DeclareStringOption[317mm]{coverheight}[317mm]
 \DeclareStringOption[1.0]{coverscale}[1.0]
-\DeclareStringOption[covermodel-art-cmyk.pdf]{coverart}[covermodel-art-cmyk.pdf]
 \DeclareOption*{\PackageWarning{ufbacover}{Unknown '\CurrentOption'}}
 \ProcessOptions\relax
 
@@ -37,11 +33,9 @@ LaTeX package loading UFBA Cover Model]
 \newcommand{\CoverWidth}{\ufbacover@coverwidth}
 \newcommand{\CoverHeight}{\ufbacover@coverheight}
 \newcommand{\CoverScale}{\ufbacover@coverscale}
-\newcommand{\CoverArt}{\ufbacover@coverart}
 \newcommand{\coverwidth}[1]{\def\CoverWidth{#1}}
 \newcommand{\coverheight}[1]{\def\CoverHeight{#1}}
 \newcommand{\coverscale}[1]{\def\CoverScale{#1}}
-\newcommand{\coverart}[1]{\def\CoverArt{#1}}
 \newcommand{\covertype}[1]{\def\CoverType{#1}}
 \newcommand{\covercode}[1]{\def\CoverCode{#1}}
 \newcommand{\covermonth}[1]{\def\CoverMonth{#1}}
@@ -61,22 +55,7 @@ LaTeX package loading UFBA Cover Model]
   \errmessage{Defined color is used for the text and cover art, but the package 'xcolor.sty' is not loaded}%
   \renewcommand\definecolor[3]{}{}{}%
 }%
-\providecommand\transparent[1]{%
-  \errmessage{Transparency is used (non-zero) for the cover art, but the package 'transparent.sty' is not loaded}%
-  \renewcommand\transparent[1]{}%
-}%
-\providecommand\Ebrima[1]{%
-  \errmessage{Font Ebrima is used for the cover art, but the package 'ebrima.sty' is not loaded}%
-  \renewcommand\ebrima[1]{}%
-}%
-\providecommand\TwCenMT[1]{%
-  \errmessage{Font Tw Cen TM is used for the cover art, but the package 'TwCenTM.sty' is not loaded}%
-  \renewcommand\TwCenMT[1]{}%
-}%
-\providecommand\transparent[1]{%
-  \errmessage{Transparency is used (non-zero) for the cover art, but the package 'transparent.sty' is not loaded}%
-  \renewcommand\transparent[1]{}%
-}%
+
 \providecommand\rotatebox[2]{#2}%
 \providecommand*\fsize{\dimexpr\f@size pt\relax}%
 \providecommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
@@ -117,7 +96,7 @@ LaTeX package loading UFBA Cover Model]
 }
 
 \newcommand{\artrectb}[2][coverDarkBlue]{
-    \put(0.5118,0){#2\colorbox{#1}{\makebox(0.4832,0.43452){}}}
+    \put(0.5118,0){#2\colorbox{#1}{\makebox(0.4836,0.43452){}}}
 }
 
 \newcommand{\artrectc}[2][coverBlue]{
@@ -204,43 +183,10 @@ LaTeX package loading UFBA Cover Model]
     \put(0.4950728,0.07637041){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{#2}{#3}\bodyfont{UFBA}\end{tabular}}}}}
 }
 
-% cover default command
+% cover with sketched background command
 \newcommand{\newcover}{
     %% cover art with latex
     \afterpage{
-        \selectcolormodel{cmyk}
-        \thispagestyle{empty}
-        \newgeometry{margin=0mm}
-        \eject \pdfpagewidth=\CoverWidth \pdfpageheight=\CoverHeight
-        \begin{figure}
-            \begin{picture}(1,0.70132751)%
-                \lineheight{1}%
-                \setlength\tabcolsep{0pt}%
-                % call front cover elements
-                \put(0,0){\includegraphics[width=\unitlength,page=1]{\CoverArt}}%
-                \artcoverfronttitle{32}{1.25}{\CoverTitle}{3.9}
-                \artcoverfrontauthor{25}{1.25}{\CoverAuthor}
-                \artcoverfrontdocumenttype{18}{1.25}{\CoverDocumentType}
-                \artcoverfrontinfo{15}{1.25}{\CoverInfo}
-                % call back cover elements
-                \artcoverbackabstractkeywords{10}{13.355}{\CoverAbstract}{\CoverKeywords}
-                \artcoverbackaddressinfo{11}{1.25}{\PGCOMPAddressInfo}
-                % call spine elements
-                \artcoverspineinstitution{14}{1.25}
-                \artcoverspineinfo{12}{1.25}{\CoverSpineInfo}
-                \artcoverspinetitle{11}{1.25}{\CoverTitle}
-                \artcoverspineauthor{12}{12.8}{\CoverAuthor}
-            \end{picture}
-        \end{figure}
-        \restoregeometry
-    }
-}
-
-% cover with sketched background command
-\newcommand{\newfullcover}{
-    %% cover art with latex
-    \afterpage{
-        \selectcolormodel{cmyk}
         \thispagestyle{empty}
         \newgeometry{margin=0mm}
         \eject \pdfpagewidth=\CoverWidth \pdfpageheight=\CoverHeight
@@ -257,7 +203,6 @@ LaTeX package loading UFBA Cover Model]
                 \artlines
                 % cover text
                 % call front cover elements
-                \put(0,0){\includegraphics[width=\unitlength,page=1]{\CoverArt}}%
                 \artcoverfronttitle{32}{1.25}{\CoverTitle}{3.9}
                 \artcoverfrontauthor{25}{1.25}{\CoverAuthor}
                 \artcoverfrontdocumenttype{18}{1.25}{\CoverDocumentType}
@@ -270,87 +215,6 @@ LaTeX package loading UFBA Cover Model]
                 \artcoverspineinfo{12}{1.25}{\CoverSpineInfo}
                 \artcoverspinetitle{11}{1.25}{\CoverTitle}
                 \artcoverspineauthor{12}{12.8}{\CoverAuthor}
-            \end{picture}
-        \end{figure}
-        \restoregeometry
-    }
-}
-
-% cover custom command with background using latex
-\newcommand{\newfullsketchedcover}{
-    %% cover art with latex
-    \afterpage{
-        \selectcolormodel{cmyk}
-        \thispagestyle{empty}
-        \newgeometry{margin=0mm}
-        \eject \pdfpagewidth=\CoverWidth \pdfpageheight=\CoverHeight
-        \begin{figure}
-            \begin{picture}(1,0.70132751)%
-                \lineheight{1}%
-                \setlength\tabcolsep{0pt}%
-                % cover background art
-                \artrecta{}
-                \artrectb{}
-                \artrectc{}
-                \artlogo
-                % add crop lines
-                \artlines
-                % cover text
-                % call front cover elements
-                \put(0,0){\includegraphics[width=\unitlength,page=1]{\CoverArt}}%
-                \artcoverfronttitle{32}{1.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}{3.9}
-                \artcoverfrontauthor{25}{1.25}{André Brasil Vieira Wyzykowski}
-                \artcoverfrontdocumenttype{18}{1.25}{Tese de Doutorado}
-                \artcoverfrontinfo{15}{1.25}{\bodyfont{Universidade Federal da Bahia}\\\\\bodyfont{Programa de Pós-Graduação em}\\\bodyfont{Ciência da Computação}\\\\\bodyfont{Fevereiro | 2022}}
-                % call back cover elements
-                \artcoverbackabstractkeywords{10}{13.355}{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}{}
-                \artcoverbackaddressinfo{11}{1.25}{\PGCOMPAddressInfo}
-                % call spine elements
-                \artcoverspineinstitution{14}{1.25}
-                \artcoverspineinfo{12}{1.25}{\bodyfont{DSC | 027 | 2022}}
-                \artcoverspinetitle{11}{1.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}
-                \artcoverspineauthor{12}{12.8}{André Brasil Vieira Wyzykowski}
-            \end{picture}
-        \end{figure}
-        \restoregeometry
-    }
-}
-
-% cover custom command
-\newcommand{\newsketchedcover}{
-    %% cover art with latex
-    \afterpage{
-        \selectcolormodel{cmyk}
-        \thispagestyle{empty}
-        \newgeometry{margin=0mm}
-        \eject \pdfpagewidth=\CoverWidth \pdfpageheight=\CoverHeight
-        \begin{figure}
-            \begin{picture}(1,0.70132751)%
-                \lineheight{1}%
-                \setlength\tabcolsep{0pt}%
-                % call art to comparison
-                \put(0,0){\includegraphics[width=\unitlength,page=1]{covermodel-art-croped-cmyk.pdf}}
-                % cover background art (over placed)
-                \artrecta[red]{\transparent{0.4}}
-                \artrectb[red]{\transparent{0.4}}
-                \artrectc[red]{\transparent{0.4}}
-                % add crop lines
-                \artlines
-                % cover text
-                % call front cover elements
-                \artcoverfronttitle[black]{32}{1.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}{3.9}
-                \artcoverfrontauthor[black]{25.13}{1.25}{André Brasil Vieira Wyzykowski}
-                \artcoverfrontdocumenttype[black]{18}{1.25}{Tese de Doutorado}
-                \artcoverfrontinfo[black]{15}{1.25}{\bodyfont{Universidade Federal da Bahia}\\\\\bodyfont{Programa de Pós-Graduação em}\\\bodyfont{Ciência da Computação}\\\\\bodyfont{Fevereiro | 2022}}
-                % call back cover elements
-                \artcoverbackabstractkeywords[black]{10}{13.355}{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}{}
-                \artcoverbackaddressinfo[black]{11.054}{1.25}{\PGCOMPAddressInfo}
-                % call spine elements
-                \artcoverspineinstitution[black]{14}{1.25}
-                \artcoverspineinfo[black]{12}{1.25}{\bodyfont{DSC | 027 | 2022}}
-                \artcoverspinetitle[black]{11.054}{1.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}
-                \artcoverspineauthor[black]{12}{12.8}{André Brasil Vieira Wyzykowski}
-                \artlogo
             \end{picture}
         \end{figure}
         \restoregeometry

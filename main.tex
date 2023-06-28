@@ -1,7 +1,4 @@
-% This example demonstrates adding a custom TrueType font
-% to your Overleaf project. The custom font is Delphine, 
-% which was sourced from https://sjfonts.sourceforge.net
-
+% An example showing how to use PGCOMP cover package
 \documentclass{article}
 \usepackage{ufbacover}
 
@@ -22,17 +19,7 @@ Furthermore, the routing that considers latency constraints has obstacles to mer
 
 \begin{document}
 
-%% First example cover with latex (mixed) for comparison
-\newsketchedcover
-
-%% Second example cover with latex only for comparison
-\newfullsketchedcover
-
-%% Third example cover with background extract as PDF from original cover
-\coverart{covermodel-art.pdf}
+%% print PGCOMP cover as first page
 \newcover
-
-%% Forth example cover with latex only
-\newfullcover
 
 \end{document}
