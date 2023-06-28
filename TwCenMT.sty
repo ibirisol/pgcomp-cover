@@ -1,9 +1,61 @@
 \ProvidesPackage{twcenmt}[2023/06/17 Ibirisol Fontes Ferreira
 LaTeX package loading TW Cen MT TTF font]
-\usepackage{iftex}
+\RequirePackage{iftex}
+
+% Add test for LuaTeX compatibility
+
 \ifLuaTeX
 \protected\def\pdfmapline {\pdfextension mapline }
 \fi
 \pdfmapfile{+TwCenMT.map}
-\newcommand\TwCenMT[1]{\usefont{T1}{TwCenMT}{m}{n} #1 }
+
+\IfFileExists{Tcm_____.ttf}{
+    \newcommand\TwCenMT[1]{\usefont{T1}{TwCenMT}{m}{n} ##1 }
+}{
+    \errmessage{The Tw Cen MT TTF file is not present fallbacking to normal text}
+    \newcommand\TwCenMT[1]{ ##1 }
+}
+
+\IfFileExists{Tcb_____.ttf}{
+    \newcommand\TwCenMTbd[1]{\usefont{T1}{TwCenMT}{b}{n} ##1 }
+}{
+    \errmessage{The Tw Cen MT Bold TTF file is not present fallbacking to normal text}
+    \newcommand\TwCenMTbd[1]{ ##1 }
+}
+
+\IfFileExists{Tcmi____.ttf}{
+    \newcommand\TwCenMTit[1]{\usefont{T1}{TwCenMT}{m}{it} ##1 }
+}{
+    \errmessage{The Tw Cen MT Italic TTF file is not present fallbacking to normal text}
+    \newcommand\TwCenMTit[1]{ ##1 }
+}
+
+\IfFileExists{Tcbi____.ttf}{
+    \newcommand\TwCenMTitbd[1]{\usefont{T1}{TwCenMT}{b}{it} ##1 }
+}{
+    \errmessage{The Tw Cen MT Bold Italic TTF file is not present fallbacking to normal text}
+    \newcommand\TwCenMTitbd[1]{ ##1 }
+}
+
+\IfFileExists{Tccm____.ttf}{
+    \newcommand\TwCenMTCond[1]{\usefont{T1}{TwCenMT}{c}{n} ##1 }
+}{
+    \errmessage{The Tw Cen MT Condensed TTF file is not present fallbacking to normal text}
+    \newcommand\TwCenMTCond[1]{ ##1 }
+}
+
+\IfFileExists{Tccb____.ttf}{
+    \newcommand\TwCenMTCondbd[1]{\usefont{T1}{TwCenMT}{cb}{n} ##1 }
+}{
+    \errmessage{The Tw Cen MT Condensed Bold TTF file is not present fallbacking to normal text}
+    \newcommand\TwCenMTCondbd[1]{ ##1 }
+}
+
+\IfFileExists{Tcceb.ttf}{
+    \newcommand\TwCenMTCondExtbd[1]{\usefont{T1}{TwCenMT}{ceb}{n} ##1 }
+}{
+    \errmessage{The Tw Cen MT Condensed Extra Bold TTF file is not present fallbacking to normal text}
+    \newcommand\TwCenMTCondExtbd[1]{ ##1 }
+}
+
 \endinput
