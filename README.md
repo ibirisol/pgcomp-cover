@@ -12,14 +12,14 @@ Add these files in the same directory of the [Latex Templates (Theses, Dissertat
 This program follows the _MIT License_. You should have received a copy of The MIT License (MIT) along with this program. If not, see <http://opensource.org/licenses/MIT/>.
 The following exceptions apply:
 
-brasao_ufba.pdf:
+ * brasao_ufba.pdf:
 
 Copyright © 2010, Universidade Federal da Bahia (UFBA) <https://www.ufba.br/>
 
-brasao_ufba.pdf, covermodel-art-cmyk.pdf, covermodel-art-croped-cmyk.pdf, covermodel-art.pdf
+ * brasao_ufba.pdf, covermodel-art-cmyk.pdf, covermodel-art-croped-cmyk.pdf, covermodel-art.pdf:
 
 Copyright © 2019, Programa de Pós-Graduação em Ciência da Computação (PGCOMP), Instituto de Computação (IC), Universidade Federal da Bahia (UFBA) <https://pgcomp.ufba.br/>
 
-Ebrima and Tw Cent TM LaTeX files:
+ * Ebrima and Tw Cent TM LaTeX files:
 
 Copyright © 2023 Ibirisol Fontes Ferreira
