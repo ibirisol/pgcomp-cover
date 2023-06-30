@@ -92,11 +92,24 @@
 \else%
     \setlength{\unitlength}{\@CoverWidth}%
 \fi%
+
 % set default text proportions
 \newlength\@CoverTextWidth
 \setlength\@CoverTextWidth{\ufbacover@covertextwidth}
 \newlength\@CoverTextHeight
 \setlength\@CoverTextHeight{\ufbacover@covertextheight}
+
+% get some variables from global definition
+\gdef\@notdefined{NA}
+\def\@CoverType{\@notdefined}
+\def\@CoverCode{\@notdefined}
+\def\@CoverMonth{\@notdefined}
+\def\@CoverYear{\@notdefined}
+\def\@CoverDocumentType{\@notdefined}
+\def\@CoverTitle{\@title}
+\def\@CoverAuthor{\@author}
+\def\@CoverAbstract{\@notdefined}
+\def\@CoverKeywords{\@notdefined}
 
 % cover colors
 \definecolor{coverDarkBlue}{cmyk}{0.99, 0.96, 0.25, 0.21}
