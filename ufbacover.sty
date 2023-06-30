@@ -1,50 +1,67 @@
-%%%
-% ufbacover - allow drawing the computer.ufba.br thesis cover using LaTeX
-%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ufbacover.sty
+%%% Allow the drawing of the IC/UFBA thesis cover using LaTeX
+%%% (C) 2023 Ibirisol Fontes Ferreira
+%%% THIS FILE COMES WITH NO WARRANTIES
+%%% PERMISSION TO COPY AND REDISTRIBUTE FREE OF CHARGE
+%%% FOR ACADEMIC PURPOSES ONLY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%    Author              = "Ibirisol Fontes Ferreira",
+%%%    Version             = "2.1",
+%%%    Date                = "20 Jun 2023",
+%%%    Filename            = "ufbacover.sty",
+%%%    Keywords            = "LaTeX, Thesis, Dissertation, Cover",
+%%%    Abstract            = "LaTeX package to draw a stylized cover for
+%%%                           Monographs, Theses, and Dissertations at
+%%%                           the Federal University of Bahia - Brazil."
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{ufbacover}[2023/06/20 Ibirisol Fontes Ferreira
-LaTeX package loading UFBA Cover Model with sketch commands]
-\RequirePackage{afterpage}
+\ProvidesPackage{ufbacover}[2023/06/20 v2.1 UFBA Stylized Cover Commands]
 \RequirePackage{geometry}
 \RequirePackage{graphicx}
-\RequirePackage{xcolor}
+\RequirePackage{color}
 \RequirePackage{array}
 \RequirePackage{ragged2e}
 \RequirePackage{xspace}
 \RequirePackage{kvoptions}
 \RequirePackage[T1]{fontenc}
-\RequirePackage[medium,semibold]{montserrat}
-\RequirePackage[regular,semibold]{noto}
 
-\newcommand\montserratfont[1]{{\fontfamily{Montserrat-TLF}\selectfont #1}}
-\newcommand\notofont[1]{{\fontfamily{NotoSans-TLF}\selectfont #1}}
+\newcommand\montserratfont{\fontfamily{Montserrat-TLF}\fontseries{medium}}
+\newcommand\notofont{\fontfamily{NotoSans-TLF}\fontseries{regular}}
 
-\newcommand\headerfont[1]{\montserratfont{#1}}
-\newcommand\bodyfont[1]{\notofont{#1}}
+\newcommand\headerfont[2]{\fontsize{#1}{#2}\montserratfont\selectfont}
+\newcommand\bodyfont[2]{\fontsize{#1}{#2}\notofont\selectfont}
 
 % options
 \DeclareStringOption[452mm]{coverwidth}[452mm]
 \DeclareStringOption[317mm]{coverheight}[317mm]
 \DeclareStringOption[1.0]{coverscale}[1.0]
+\DeclareStringOption[30]{fronttitlesize}[30]
+\DeclareStringOption[11]{spinetitlesize}[11]
+\DeclareStringOption[24]{frontauthorsize}[24]
+\DeclareStringOption[11]{spineauthorsize}[11]
+\DeclareStringOption[215.9mm]{covertextwidth}[215.9mm]
+\DeclareStringOption[279.4mm]{covertextheight}[279.4mm]
 \DeclareOption*{\PackageWarning{ufbacover}{Unknown '\CurrentOption'}}
 \ProcessOptions\relax
 
 % commands
-\newcommand{\CoverWidth}{\ufbacover@coverwidth}
-\newcommand{\CoverHeight}{\ufbacover@coverheight}
-\newcommand{\CoverScale}{\ufbacover@coverscale}
-\newcommand{\coverwidth}[1]{\def\CoverWidth{#1}}
-\newcommand{\coverheight}[1]{\def\CoverHeight{#1}}
-\newcommand{\coverscale}[1]{\def\CoverScale{#1}}
-\newcommand{\covertype}[1]{\def\CoverType{#1}}
-\newcommand{\covercode}[1]{\def\CoverCode{#1}}
-\newcommand{\covermonth}[1]{\def\CoverMonth{#1}}
-\newcommand{\coveryear}[1]{\def\CoverYear{#1}}
-\newcommand{\coverdocumenttype}[1]{\def\CoverDocumentType{#1}}
-\newcommand{\covertitle}[1]{\def\CoverTitle{#1}}
-\newcommand{\coverauthor}[1]{\def\CoverAuthor{#1}}
-\newcommand{\coverabstract}[1]{\def\CoverAbstract{#1}}
-\newcommand{\coverkeywords}[1]{\def\CoverKeywords{#1}}
+\newcommand{\@CoverWidth}{\ufbacover@coverwidth}
+\newcommand{\@CoverHeight}{\ufbacover@coverheight}
+\newcommand{\@CoverScale}{\ufbacover@coverscale}
+\newcommand{\@CoverFrontTitleSize}{\ufbacover@fronttitlesize}
+\newcommand{\@CoverSpineTitleSize}{\ufbacover@spinetitlesize}
+\newcommand{\@CoverFrontAuthorSize}{\ufbacover@frontauthorsize}
+\newcommand{\@CoverSpineAuthorSize}{\ufbacover@spineauthorsize}
+\newcommand{\covertype}[1]{\def\@CoverType{#1}}
+\newcommand{\covercode}[1]{\def\@CoverCode{#1}}
+\newcommand{\covermonth}[1]{\def\@CoverMonth{#1}}
+\newcommand{\coveryear}[1]{\def\@CoverYear{#1}}
+\newcommand{\coverdocumenttype}[1]{\def\@CoverDocumentType{#1}}
+\newcommand{\covertitle}[1]{\def\@CoverTitle{#1}}
+\newcommand{\coverauthor}[1]{\def\@CoverAuthor{#1}}
+\newcommand{\coverabstract}[1]{\def\@CoverAbstract{#1}}
+\newcommand{\coverkeywords}[1]{\def\@CoverKeywords{#1}}
 
 % adapted commands from inkscape
 \providecommand\color[2][]{%
@@ -55,10 +72,7 @@ LaTeX package loading UFBA Cover Model with sketch commands]
   \errmessage{Defined color is used for the text and cover art, but the package 'xcolor.sty' is not loaded}%
   \renewcommand\definecolor[3]{}{}{}%
 }%
-
 \providecommand\rotatebox[2]{#2}%
-\providecommand*\fsize{\dimexpr\f@size pt\relax}%
-\providecommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
 
 % new commands for betters tabular adjustments
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
@@ -68,20 +82,21 @@ LaTeX package loading UFBA Cover Model with sketch commands]
 \newcolumntype{J}[1]{>{\justify\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 
 % cover page layout parameter
-\def\svgwidth{\CoverWidth}
-\def\svgheight{\CoverHeight}
-\def\svgscale{\CoverScale}
-
-\ifx\svgwidth\undefined%
+\ifx\@CoverWidth\undefined%
     \setlength{\unitlength}{1mm}%
-    \ifx\svgscale\undefined%
+    \ifx\@CoverScale\undefined%
         \relax%
     \else%
-        \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+        \setlength{\unitlength}{\unitlength * \real{\@CoverScale}}%
     \fi%
 \else%
-    \setlength{\unitlength}{\svgwidth}%
+    \setlength{\unitlength}{\@CoverWidth}%
 \fi%
+% set default text proportions
+\newlength\@CoverTextWidth
+\setlength\@CoverTextWidth{\ufbacover@covertextwidth}
+\newlength\@CoverTextHeight
+\setlength\@CoverTextHeight{\ufbacover@covertextheight}
 
 % cover colors
 \definecolor{coverDarkBlue}{cmyk}{0.99, 0.96, 0.25, 0.21}
@@ -89,135 +104,138 @@ LaTeX package loading UFBA Cover Model with sketch commands]
 \definecolor{coverBlue}{cmyk}{1.0, 0.2, 0, 0}
 \definecolor{coverBlueLight}{cmyk}{0.4, 0, 0, 0}
 \definecolor{coverWhite}{cmyk}{0, 0, 0, 0}
+\definecolor{coverBlack}{cmyk}{1, 1, 1, 1}
 
 % cover art drawing
-\newcommand{\artrecta}[2][coverBlue]{
-    \put(0,0.48695){#2\colorbox{#1}{\makebox(0.4317,0.212){}}}
+\newcommand{\artrecta}[2][coverBlue]{%
+    \put(0,0.48695){#2\colorbox{#1}{\makebox(0.4317,0.212){}}}%
 }
 
-\newcommand{\artrectb}[2][coverDarkBlue]{
-    \put(0.5118,0){#2\colorbox{#1}{\makebox(0.4836,0.43452){}}}
+\newcommand{\artrectb}[2][coverDarkBlue]{%
+    \put(0.5118,0){#2\colorbox{#1}{\makebox(0.4836,0.43452){}}}%
 }
 
-\newcommand{\artrectc}[2][coverBlue]{
-    \put(0.43585,0){#2\colorbox{#1}{\makebox(0.15022,0.098456){}}}
+\newcommand{\artrectc}[2][coverBlue]{%
+    \put(0.43585,0){#2\colorbox{#1}{\makebox(0.15022,0.098456){}}}%
 }
 
-\newcommand{\artlines}{
+\newcommand{\artlines}{%
     % left top
-    \put(0.02213,0.70132751){\color{white}\line(0,-1){0.0177}}
-    \put(0,0.67919751){\color{white}\line(1,0){0.0177}}
+    \put(0.02213,0.70132751){\color{coverWhite}\line(0,-1){0.0177}}%
+    \put(0,0.67919751){\color{coverWhite}\line(1,0){0.0177}}%
     % left bottom
-    \put(0.02213,0){\line(0,1){0.0177}}
-    \put(0,0.02213){\line(1,0){0.0177}}
+    \put(0.02213,0){\color{coverBlack}\line(0,1){0.0177}}%
+    \put(0,0.02213){\color{coverBlack}\line(1,0){0.0177}}%
     % center top
-    \put(0.4867,0.70132751){\line(0,-1){0.0177}}
-    \put(0.5128,0.70132751){\line(0,-1){0.0177}}
+    \put(0.4867,0.70132751){\color{coverBlack}\line(0,-1){0.0177}}%
+    \put(0.5128,0.70132751){\color{coverBlack}\line(0,-1){0.0177}}%
     % center bottom
-    \put(0.4867,0){\color{white}\line(0,1){0.0177}}
-    \put(0.5128,0){\color{white}\line(0,1){0.0177}}
+    \put(0.4867,0){\color{coverWhite}\line(0,1){0.0177}}%
+    \put(0.5128,0){\color{coverWhite}\line(0,1){0.0177}}%
     % right top
-    \put(0.97736,0.70132751){\line(0,-1){0.0177}}
-    \put(1,0.6788){\line(-1,0){0.0177}}
+    \put(0.97736,0.70132751){\color{coverBlack}\line(0,-1){0.0177}}%
+    \put(1,0.6788){\color{coverBlack}\line(-1,0){0.0177}}%
     % right bottom
-    \put(0.97736,0){\color{white}\line(0,1){0.0177}}
-    \put(1,0.0218){\color{white}\line(-1,0){0.0177}}
+    \put(0.97736,0){\color{coverWhite}\line(0,1){0.0177}}%
+    \put(1,0.0218){\color{coverWhite}\line(-1,0){0.0177}}%
 }
 
-\newcommand{\artlogo}{
-    \put(0.5357,0.037){\includegraphics[width=14.76mm]{brasao_ufba.pdf}}
+\newcommand{\artlogo}{%
+    \put(0.536,0.0374){\includegraphics[width=14.2mm]{ufba.pdf}}%
 }
 
 % front cover text commands
-\newcommand{\artcoverfronttitle}[5][coverDarkBlue]{
-    \put(0.58607,0.57991487){\color{#1}\makebox(0,0)[lt]{\lineheight{#5}\smash{\begin{tabular}[t]{R{0.74\textwidth}}\fontsize{#2}{#3}\headerfont{#4}\end{tabular}}}}
+\newcommand{\artcoverfronttitle}[4][coverDarkBlue]{%
+    \put(0.58607,0.5985){\color{#1}\makebox(0,0)[lt]{\headerfont{#2}{#3}\smash{\begin{tabular}[t]{R{0.74\@CoverTextWidth}}#4\end{tabular}}}}%
 }
 
-\newcommand{\artcoverfrontauthor}[4][coverWhite]{
-    \put(0.58607,0.33259119){\color{#1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{R{0.74\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\end{tabular}}}}
+\newcommand{\artcoverfrontauthor}[4][coverWhite]{%
+    \put(0.58607,0.33259119){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{R{0.74\@CoverTextWidth}}#4\end{tabular}}}}%
 }
 
-\newcommand{\artcoverfrontdocumenttype}[4][coverBlueLight]{
-    \put(0.58607,0.21391464){\color{#1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.74\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\end{tabular}}}}
+\newcommand{\artcoverfrontdocumenttype}[4][coverBlueLight]{%
+    \put(0.58607,0.21391464){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.74\@CoverTextWidth}}\bodyfont{#2}{#3}{#4}\end{tabular}}}}%
 }
 
-\newcommand{\CoverInfo}{
-    \bodyfont{Universidade Federal da Bahia}\\\\\bodyfont{Programa de Pós-Graduação em}\\\bodyfont{Ciência da Computação}\\\\\bodyfont{\CoverMonth\xspace|\xspace\CoverYear}
+\newcommand{\@CoverInfo}{%
+    Universidade Federal da Bahia\\\\Programa de Pós-Graduação em\\Ciência da Computação\\\\\@CoverMonth\xspace|\xspace\@CoverYear%
 }
 
-\newcommand{\artcoverfrontinfo}[4][coverWhite]{
-    \put(0.59070796,0.18218165){\color{#1}\makebox(0,0)[lt]{\lineheight{2}\smash{\fontsize{#2}{#3}\begin{tabular}[t]{R{0.73\textwidth}} #4 \end{tabular}}}}
+\newcommand{\artcoverfrontinfo}[4][coverWhite]{%
+    \put(0.59070796,0.18218165){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{R{0.73\@CoverTextWidth}}#4\end{tabular}}}}%
 }
 
 % back cover text commands
-\newcommand{\PGCOMPAddressInfo}{
-    \bodyfont{PGCOMP - Programa de Pós-Graduação em Ciência da Computação}\\\bodyfont{Universidade Federal da Bahia (UFBA)}\\\bodyfont{Av. Milton Santos, s/n - Ondina}\\\bodyfont{Salvador, BA, Brasil, 40170-110}\\\\\bodyfont{https://pgcomp.ufba.br}\\\bodyfont{pgcomp@ufba.br}
+\newcommand{\@PGCOMPAddressInfo}{%
+    PGCOMP - Programa de Pós-Graduação em Ciência da Computação\\Universidade Federal da Bahia (UFBA)\\Av. Milton Santos, s/n - Ondina\\Salvador, BA, Brasil, 40170-110\\\\https://pgcomp.ufba.br\\pgcomp@ufba.br%
 }
 
-\newcommand{\artcoverbackaddressinfo}[4][coverWhite]{
-    \put(0.12603759,0.6124423){\color{#1}\makebox(0,0)[lt]{\lineheight{1.466}\smash{\fontsize{#2}{#3}\begin{tabular}[t]{l}#4\end{tabular}}}}
+\newcommand{\artcoverbackaddressinfo}[4][coverWhite]{%
+    \put(0.12603759,0.6124423){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{l}#4\end{tabular}}}}%
 }
 
-\newcommand{\artcoverbackabstractkeywords}[5][coverDarkBlueLight]{
-    \put(0.12603759,0.46617283){\color{#1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{J{0.65\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\newline\bodyfont{#5}\end{tabular}}}}
+\newcommand{\artcoverbackabstractkeywords}[5][coverDarkBlueLight]{%
+    \put(0.12603759,0.46617283){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{J{0.65\@CoverTextWidth}}#4\newline#5\end{tabular}}}}%
 }
 
 % spine text commands
-\newcommand{\CoverSpineInfo}{
-    \xspace\CoverType\xspace|\xspace\CoverCode\xspace|\xspace\CoverYear\xspace
+\newcommand{\@CoverSpineInfo}{%
+    \xspace\@CoverType\xspace|\xspace\@CoverCode\xspace|\xspace\@CoverYear\xspace%
 }
 
-\newcommand{\artcoverspineinfo}[4][coverBlue]{
-    \put(0.49782899,0.63889314){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{#2}{#3}\bodyfont{#4}\end{tabular}}}}}
+\newcommand{\artcoverspineinfo}[4][coverBlue]{%
+    \put(0.49782899,0.63889314){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{l}#4\end{tabular}}}}}%
 }
 
-\newcommand{\artcoverspinetitle}[4][coverDarkBlue]{
-    \put(0.49644488,0.5493505){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{C{0.69\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\end{tabular}}}}}
+\newcommand{\artcoverspinetitle}[4][coverDarkBlue]{%
+    \put(0.4978,0.5493505){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{M{0.69\@CoverTextWidth}}#4\end{tabular}}}}}%
 }
 
-\newcommand{\artcoverspineauthor}[4][coverDarkBlue]{
-    \put(0.4963,0.20886039){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{M{0.225\textwidth}}\fontsize{#2}{#3}\bodyfont{#4}\end{tabular}}}}}
+\newcommand{\artcoverspineauthor}[4][coverDarkBlue]{%
+    \put(0.4978,0.20886039){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{M{0.225\@CoverTextWidth}}#4\end{tabular}}}}}%
 }
 
-\newcommand{\artcoverspineinstitution}[3][coverWhite]{
-    \put(0.4950728,0.07637041){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\fontsize{#2}{#3}\bodyfont{UFBA}\end{tabular}}}}}
+\newcommand{\artcoverspineinstitution}[3][coverWhite]{%
+    \put(0.4950728,0.07637041){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{l}UFBA\end{tabular}}}}}%
 }
 
 % cover with sketched background command
-\newcommand{\newcover}{
+\newcommand{\pgcompcover}{%
     %% cover art with latex
-    \afterpage{
-        \thispagestyle{empty}
-        \newgeometry{margin=0mm}
-        \eject \pdfpagewidth=\CoverWidth \pdfpageheight=\CoverHeight
-        \begin{figure}
+    {%
+        \clearpage%
+        \thispagestyle{empty}%
+        \addtocounter{page}{-1}%
+        \newgeometry{margin=0mm}%
+        \eject \pdfpagewidth=\@CoverWidth \pdfpageheight=\@CoverHeight \@CoverTextWidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
+        \newgeometry{margin=0mm}%
+        \begin{figure}%
             \begin{picture}(1,0.70132751)%
-                \lineheight{1}%
                 \setlength\tabcolsep{0pt}%
                 % cover background art
-                \artrecta{}
-                \artrectb{}
-                \artrectc{}
-                \artlogo
+                \artrecta{}%
+                \artrectb{}%
+                \artrectc{}%
+                \artlogo%
                 % add crop lines
-                \artlines
+                \artlines%
                 % cover text
                 % call front cover elements
-                \artcoverfronttitle{32}{1.25}{\CoverTitle}{3.9}
-                \artcoverfrontauthor{25}{1.25}{\CoverAuthor}
-                \artcoverfrontdocumenttype{18}{1.25}{\CoverDocumentType}
-                \artcoverfrontinfo{15}{1.25}{\CoverInfo}
+                \artcoverfronttitle{\@CoverFrontTitleSize}{39.2}{\@CoverTitle}%
+                \artcoverfrontauthor{\@CoverFrontAuthorSize}{24}{\@CoverAuthor}%
+                \artcoverfrontdocumenttype{18}{18}{\@CoverDocumentType}%
+                \artcoverfrontinfo{15}{19.97}{\@CoverInfo}%
                 % call back cover elements
-                \artcoverbackabstractkeywords{10}{13.355}{\CoverAbstract}{\CoverKeywords}
-                \artcoverbackaddressinfo{11}{1.25}{\PGCOMPAddressInfo}
+                \artcoverbackabstractkeywords{10}{13.355}{\@CoverAbstract}{\@CoverKeywords}%
+                \artcoverbackaddressinfo{11}{14.68}{\@PGCOMPAddressInfo}%
                 % call spine elements
-                \artcoverspineinstitution{14}{1.25}
-                \artcoverspineinfo{12}{1.25}{\CoverSpineInfo}
-                \artcoverspinetitle{11}{1.25}{\CoverTitle}
-                \artcoverspineauthor{12}{12.8}{\CoverAuthor}
-            \end{picture}
-        \end{figure}
-        \restoregeometry
+                \artcoverspineinstitution{14}{14}%
+                \artcoverspineinfo{11}{11}{\@CoverSpineInfo}%
+                \artcoverspinetitle{\@CoverSpineTitleSize}{11}{\@CoverTitle}%
+                \artcoverspineauthor{\@CoverSpineAuthorSize}{11}{\@CoverAuthor}%
+            \end{picture}%
+        \end{figure}%
+        \restoregeometry%
     }
 }
 
