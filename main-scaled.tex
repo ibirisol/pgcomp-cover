@@ -1,0 +1,32 @@
+% An example showing how to use PGCOMP cover package
+\documentclass[a4paper]{article}
+\usepackage{xcolor}% uncomment it to remove the warning from ufbacover
+\usepackage[media=scr]{ufbacover}
+\usepackage{lipsum}
+
+\title{PGCOMP: LaTeX Cover Example}
+\author{Ibirisol Fontes Ferreira}
+
+%% cover definitions
+\covertype{MSC}
+\covercode{XXX}
+\covermonth{Abril}
+\coveryear{2023}
+\coverdocumenttype{Dissertação de Mestrado}
+% overwritten the value from \title 
+\covertitle{Fairness-Oriented Multicast Routing for Distributed Interactive Applications with Computing on the Network Edge}
+% same as \author
+%\coverauthor{Ibirisol Fontes Ferreira}
+\coverabstract{Facing the challenges of network services on the edge, such as routing considering the quality of service, is a crucial issue for the current research efforts in the area of the network. Multicast routing is an essential technique for delivering routing services with a high level of optimization from the perspective of operators and application providers when there are user groups.
+Furthermore, the routing that considers latency constraints has obstacles to merging different conditions in the solution, mainly when there is a fairness perspective to be accomplished in the users' communication. This work aims to deal with this fairness requirement in multicasting, showing efficient solutions to increase the equilibrium in the routing by choosing better path options for fair group interaction.}
+\coverkeywords{Keywords: \textit{Distributed Interactive Application}, \textit{Edge Computing}, \textit{Software Defined Network}, \textit{Fairness}, \textit{Playability}, \textit{Multicast Routing}, \textit{Shortest Path}, \textit{Delay and Delay-variation}.}
+
+\begin{document}
+
+%% print PGCOMP cover as first page 
+\pgcompcover
+
+%% Regular Text
+\lipsum
+
+\end{document}
