@@ -1,6 +1,7 @@
 % Sketch example for show help to build PGCOMP cover
 % It use a comparison with original art exported as PDF
 \documentclass{article}
+\usepackage{xcolor}% uncomment it to remove the warning from ufbacover
 \usepackage{ufbacoversketch}
 
 \title{PGCOMP: LaTeX Cover Example}
@@ -20,6 +21,9 @@ Furthermore, the routing that considers latency constraints has obstacles to mer
 
 \begin{document}
 
+%% Ground zero (with all sizes and proportions as original)
+\newsketchedcovercomparedoriginal
+
 %% First example cover with latex (mixed) for comparison
 \newsketchedcover
 
@@ -27,8 +31,8 @@ Furthermore, the routing that considers latency constraints has obstacles to mer
 \newfullsketchedcover
 
 %% Third example cover with background extract as PDF from original cover
-\coverart{covermodel-art.pdf}
-\newcover
+%\coverart{covermodel-art.pdf}
+%\newcover
 
 %% Forth example cover with latex only
 \newfullcover
