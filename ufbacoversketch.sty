@@ -17,6 +17,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ufbacoversketch}[2023/06/20 v2.1 UFBA Stylized Cover with Sketch Commands]
+%\PassOptionsToPackage[showframe]{geometry} % uncomment it during manual draw
 \RequirePackage{geometry}
 \RequirePackage{graphicx}
 \RequirePackage{color}
@@ -24,8 +25,10 @@
 \RequirePackage{ragged2e}
 \RequirePackage{xspace}
 \RequirePackage{kvoptions}
+\RequirePackage{ifthen}
+\PassOptionsToPackage{T1}{fontenc}
+\RequirePackage{fontenc}
 \RequirePackage{transparent}
-\RequirePackage[T1]{fontenc}
 \RequirePackage{ebrima}
 \RequirePackage{twcenmt}
 \RequirePackage{montserrat}
@@ -40,31 +43,52 @@
 \newcommand\bodyfont[2]{\fontsize{#1}{#2}\notofont\selectfont}
 
 % options
-\DeclareStringOption[452mm]{coverwidth}[452mm]
-\DeclareStringOption[317mm]{coverheight}[317mm]
-\DeclareStringOption[1.0]{coverscale}[1.0]
-\DeclareStringOption[30]{fronttitlesize}[30]
+\SetupKeyvalOptions{family=ufbacoversketch,prefix=ufbacoversketch@}
+\DeclareStringOption[452mm]{width}[452mm]
+\DeclareStringOption[317mm]{height}[317mm]
+\DeclareStringOption[1.0]{scale}[1.0]
+\DeclareStringOption[32]{fronttitlesize}[32]
 \DeclareStringOption[11]{spinetitlesize}[11]
 \DeclareStringOption[24]{frontauthorsize}[24]
 \DeclareStringOption[11]{spineauthorsize}[11]
-\DeclareStringOption[covermodel-art-cmyk.pdf]{coverart}[covermodel-art-cmyk.pdf]
-\DeclareStringOption[215.9mm]{covertextwidth}[215.9mm]
-\DeclareStringOption[279.4mm]{covertextheight}[279.4mm]
-\DeclareOption*{\PackageWarning{ufbacover}{Unknown '\CurrentOption'}}
-\ProcessOptions\relax
+\DeclareStringOption[covermodel-art-cmyk.pdf]{art}[covermodel-art-cmyk.pdf]
+\DeclareStringOption[215.9mm]{textwidth}[215.9mm]
+\DeclareStringOption[279.4mm]{textheight}[279.4mm]
+\DeclareStringOption[print]{media}[print]% to keep compatibility with ufbathesis.cls
+\DeclareDefaultOption{\PackageWarningNoLine{ufbacover}{Unknown option '\CurrentOption'}}
+\ProcessKeyvalOptions{ufbacoversketch}
 
-% commands
-\newcommand{\@CoverWidth}{\ufbacoversketch@coverwidth}
-\newcommand{\@CoverHeight}{\ufbacoversketch@coverheight}
-\newcommand{\@CoverScale}{\ufbacoversketch@coverscale}
+% init the lengths
+\newlength\@CoverWidth
+\newlength\@CoverHeight
+\newlength\@CoverScaledWidth
+\newlength\@CoverScaledHeight
+\newlength\@CoverTextWidth
+\newlength\@CoverTextHeight
+
+% setup lengths
+% set deafult scale
+\newcommand{\@CoverScale}{\ufbacoversketch@scale}
+% set default page size
+\setlength{\@CoverWidth}{\ufbacoversketch@width}
+\setlength{\@CoverHeight}{\ufbacoversketch@height}
+% set default scaled page size
+\setlength{\@CoverScaledWidth}{\ufbacoversketch@width}
+\setlength{\@CoverScaledHeight}{\ufbacoversketch@height}
+% set default text proportions
+\setlength{\@CoverTextWidth}{\ufbacoversketch@textwidth}
+\setlength{\@CoverTextHeight}{\ufbacoversketch@textheight}
+% set default editable text font size
 \newcommand{\@CoverFrontTitleSize}{\ufbacoversketch@fronttitlesize}
 \newcommand{\@CoverSpineTitleSize}{\ufbacoversketch@spinetitlesize}
 \newcommand{\@CoverFrontAuthorSize}{\ufbacoversketch@frontauthorsize}
 \newcommand{\@CoverSpineAuthorSize}{\ufbacoversketch@spineauthorsize}
-\newcommand{\@CoverArt}{\ufbacoversketch@coverart}
-\newcommand{\coverwidth}[1]{\def\@CoverWidth{#1}}
-\newcommand{\coverheight}[1]{\def\@CoverHeight{#1}}
-\newcommand{\coverscale}[1]{\def\@CoverScale{#1}}
+% set default media (predefined shortcut to scaled size)
+\newcommand{\@CoverDistributionMedia}{\ufbacoversketch@media}
+% set default art background when using undrawing version
+\newcommand{\@CoverArt}{\ufbacoversketch@art}
+
+% externalized commands (public)
 \newcommand{\coverart}[1]{\def\@CoverArt{#1}}
 \newcommand{\covertype}[1]{\def\@CoverType{#1}}
 \newcommand{\covercode}[1]{\def\@CoverCode{#1}}
@@ -78,12 +102,16 @@
 
 % adapted commands from inkscape
 \providecommand\color[2][]{%
-  \errmessage{Color is used for the text and cover art, but the package 'color.sty' is not loaded}%
+  \PackageError{ufbacover}{Color is used for the text and cover art, but the package 'color.sty' is not loaded}{Load the package either 'color.sty' or 'xcolor.sty' before'}
   \renewcommand\color[2][]{}%
 }%
 \providecommand\definecolor[3][]{%
-  \errmessage{Defined color is used for the text and cover art, but the package 'xcolor.sty' is not loaded}%
+  \PackageError{ufbacover}{Defined color is used for the text and cover art, but the package 'xcolor.sty' is not loaded}{Load the package 'xcolor.sty' before}%
   \renewcommand\definecolor[3]{}{}{}%
+}%
+\providecommand\colorbox[2][]{%
+  \PackageError{ufbacover}{Colorbox is used for the text and cover art, but the package 'xcolor.sty' is not loaded}{Load the package 'xcolor.sty' before}%
+  \renewcommand\colorbox[2]{}{}%
 }%
 \providecommand\transparent[1]{%
   \errmessage{Transparency is used (non-zero) for the cover art, but the package 'transparent.sty' is not loaded}%
@@ -100,11 +128,33 @@
 \providecommand\rotatebox[2]{#2}%
 
 % new commands for betters tabular adjustments
-\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
-\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
-\newcolumntype{M}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
-\newcolumntype{J}[1]{>{\justify\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{\@CL}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{\@CC}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{\@CM}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{\@CR}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{\@CJ}[1]{>{\justifying\let\newline\\\arraybackslash}p{#1}}
+
+% setup scaling requirements
+\def\@CoverScrRatio{0.46460674157303367} % ratio 8.27inch(thesis)/17.8inch(cover)
+% check if it has the digital/physical publication
+\ifthenelse{\equal{\@CoverDistributionMedia}{print}}{%
+    \relax
+}{% else if
+    \ifthenelse{\equal{\@CoverDistributionMedia}{scr}}{%
+        \def\@CoverScale{\@CoverScrRatio}
+    }{% else
+        \PackageWarningNoLine{ufbacover}{Unknown value '\@CoverDistributionMedia' for option 'media'}
+        \relax
+    }
+}
+
+% setup scaled page
+\ifx\@CoverScale{1.0}%
+    \relax
+\else%
+    \setlength{\@CoverScaledWidth}{\@CoverScale\@CoverWidth}
+    \setlength{\@CoverScaledHeight}{\@CoverScale\@CoverHeight}
+\fi%
 
 % cover page layout parameter
 \ifx\@CoverWidth\undefined%
@@ -117,12 +167,6 @@
 \else%
     \setlength{\unitlength}{\@CoverWidth}%
 \fi%
-
-% set default text proportions
-\newlength\@CoverTextWidth
-\setlength\@CoverTextWidth{\ufbacoversketch@covertextwidth}
-\newlength\@CoverTextHeight
-\setlength\@CoverTextHeight{\ufbacoversketch@covertextheight}
 
 % get some variables from global definition
 \gdef\@notdefined{NA}
@@ -137,12 +181,24 @@
 \def\@CoverKeywords{\@notdefined}
 
 % cover colors
-\definecolor{coverDarkBlue}{cmyk}{0.99, 0.96, 0.25, 0.21}
-\definecolor{coverDarkBlueLight}{cmyk}{0.6, 0.4, 0, 0.4}
-\definecolor{coverBlue}{cmyk}{1.0, 0.2, 0, 0}
-\definecolor{coverBlueLight}{cmyk}{0.4, 0, 0, 0}
-\definecolor{coverWhite}{cmyk}{0, 0, 0, 0}
-\definecolor{coverBlack}{cmyk}{1, 1, 1, 1}
+\@ifpackageloaded{xcolor}{%
+    % original color scheme with CMYK
+    \definecolor{coverDarkBlue}{cmyk}{0.99, 0.96, 0.25, 0.21}
+    \definecolor{coverDarkBlueLight}{cmyk}{0.6, 0.4, 0, 0.4}
+    \definecolor{coverBlue}{cmyk}{1.0, 0.2, 0, 0}
+    \definecolor{coverBlueLight}{cmyk}{0.4, 0, 0, 0}
+    \definecolor{coverWhite}{cmyk}{0, 0, 0, 0}
+    \definecolor{coverBlack}{cmyk}{1, 1, 1, 1}
+}{%
+    \PackageWarningNoLine{ufbacover}{The package 'xcolor.sty' is not loaded, but it is needed and recommended to load it in the document class. Loading colors in the fallback mode with RGB without the printer-compatible colors (CMYK)}%
+    % adapted color scheme with RGB
+    \definecolor{coverDarkBlue}{rgb}{0.15294118,0.16862745,0.40392157}
+    \definecolor{coverDarkBlueLight}{rgb}{0.28235294,0.36862745,0.53333333}
+    \definecolor{coverBlue}{rgb}{0,0.58431373,0.85490196}
+    \definecolor{coverBlueLight}{rgb}{0.55686275,0.84705882,0.97254902}
+    \definecolor{coverWhite}{rgb}{1,1,1}
+    \definecolor{coverBlack}{rgb}{0,0,0}
+}
 
 % cover art drawing
 \newcommand{\artrecta}[2][coverBlue]{%
@@ -184,15 +240,15 @@
 
 % front cover text commands
 \newcommand{\artcoverfronttitle}[4][coverDarkBlue]{%
-    \put(0.58607,0.5985){\color{#1}\makebox(0,0)[lt]{\headerfont{#2}{#3}\smash{\begin{tabular}[t]{R{0.74\@CoverTextWidth}}#4\end{tabular}}}}%
+    \put(0.58607,0.5985){\color{#1}\makebox(0,0)[lt]{\headerfont{#2}{#3}\smash{\begin{tabular}[t]{\@CR{0.74\@CoverTextWidth}}#4\end{tabular}}}}%
 }
 
 \newcommand{\artcoverfrontauthor}[4][coverWhite]{%
-    \put(0.58607,0.33259119){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{R{0.74\@CoverTextWidth}}#4\end{tabular}}}}%
+    \put(0.58607,0.33259119){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{\@CR{0.74\@CoverTextWidth}}#4\end{tabular}}}}%
 }
 
 \newcommand{\artcoverfrontdocumenttype}[4][coverBlueLight]{%
-    \put(0.58607,0.21391464){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{>{\raggedleft}p{0.74\@CoverTextWidth}}\bodyfont{#2}{#3}{#4}\end{tabular}}}}%
+    \put(0.58607,0.21391464){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{\@CR{0.74\@CoverTextWidth}}\bodyfont{#2}{#3}{#4}\end{tabular}}}}%
 }
 
 \newcommand{\@CoverInfo}{%
@@ -200,7 +256,7 @@
 }
 
 \newcommand{\artcoverfrontinfo}[4][coverWhite]{%
-    \put(0.59070796,0.18218165){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{R{0.73\@CoverTextWidth}}#4\end{tabular}}}}%
+    \put(0.59070796,0.18218165){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{\@CR{0.73\@CoverTextWidth}}#4\end{tabular}}}}%
 }
 
 % back cover text commands
@@ -213,7 +269,7 @@
 }
 
 \newcommand{\artcoverbackabstractkeywords}[5][coverDarkBlueLight]{%
-    \put(0.12603759,0.46617283){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{J{0.65\@CoverTextWidth}}#4\newline#5\end{tabular}}}}%
+    \put(0.12603759,0.46617283){\color{#1}\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{\@CJ{0.6485\@CoverTextWidth}}\noindent#4\newline#5\end{tabular}}}}%
 }
 
 % spine text commands
@@ -226,11 +282,11 @@
 }
 
 \newcommand{\artcoverspinetitle}[4][coverDarkBlue]{%
-    \put(0.4978,0.5493505){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{M{0.69\@CoverTextWidth}}#4\end{tabular}}}}}%
+    \put(0.4978,0.5493505){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{\@CM{0.69\@CoverTextWidth}}#4\end{tabular}}}}}%
 }
 
 \newcommand{\artcoverspineauthor}[4][coverDarkBlue]{%
-    \put(0.4978,0.20886039){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{M{0.225\@CoverTextWidth}}#4\end{tabular}}}}}%
+    \put(0.4978,0.20886039){\color{#1}\rotatebox{-90}{\makebox(0,0)[lt]{\bodyfont{#2}{#3}\smash{\begin{tabular}[t]{\@CM{0.225\@CoverTextWidth}}#4\end{tabular}}}}}%
 }
 
 \newcommand{\artcoverspineinstitution}[3][coverWhite]{%
@@ -244,26 +300,28 @@
         \clearpage%
         \thispagestyle{empty}%
         \addtocounter{page}{-1}%
-        \eject \pdfpagewidth=\@CoverWidth \pdfpageheight=\@CoverHeight \@CoverTextWidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
-        \newgeometry{margin=0mm}%
+        \eject \pdfpagewidth=\@CoverScaledWidth \pdfpageheight=\@CoverScaledHeight \textwidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
+        \newgeometry{margin=0mm, layoutwidth=\@CoverScaledWidth, layoutheight=\@CoverScaledHeight}%
         \begin{figure}%
-            \begin{picture}(1,0.70132751)%
-                \setlength\tabcolsep{0pt}%
-                % call front cover elements
-                \put(0,0){\includegraphics[width=\unitlength,page=1]{\@CoverArt}}%
-                \artcoverfronttitle{32}{32}{\@CoverTitle}%
-                \artcoverfrontauthor{25.13}{25.13}{\@CoverAuthor}%
-                \artcoverfrontdocumenttype{18}{18}{\@CoverDocumentType}%
-                \artcoverfrontinfo{15}{19.97}{\@CoverInfo}%
-                % call back cover elements
-                \artcoverbackabstractkeywords{10}{13.355}{\@CoverAbstract}{\@CoverKeywords}%
-                \artcoverbackaddressinfo{11.054}{14.68}{\@PGCOMPAddressInfo}%
-                % call spine elements
-                \artcoverspineinstitution{14}{14}%
-                \artcoverspineinfo{12}{12}{\@CoverSpineInfo}%
-                \artcoverspinetitle{11}{11}{\@CoverTitle}%
-                \artcoverspineauthor{12}{12}{\@CoverAuthor}%
-            \end{picture}%
+            \resizebox{\@CoverScaledWidth}{\@CoverScaledHeight}{%
+                \begin{picture}(1,0.70132751)%
+                    \setlength\tabcolsep{0pt}%
+                    % call front cover elements
+                    \put(0,0){\includegraphics[width=\unitlength,page=1]{\@CoverArt}}%
+                    \artcoverfronttitle{32}{32}{\@CoverTitle}%
+                    \artcoverfrontauthor{24}{25.13}{\@CoverAuthor}%
+                    \artcoverfrontdocumenttype{18}{18}{\@CoverDocumentType}%
+                    \artcoverfrontinfo{15}{20.02}{\@CoverInfo}%
+                    % call back cover elements
+                    \artcoverbackabstractkeywords{10}{13.355}{\@CoverAbstract}{\@CoverKeywords}%
+                    \artcoverbackaddressinfo{11}{14.68}{\@PGCOMPAddressInfo}%
+                    % call spine elements
+                    \artcoverspineinstitution{14}{14}%
+                    \artcoverspineinfo{11}{12}{\@CoverSpineInfo}%
+                    \artcoverspinetitle{11}{11}{\@CoverTitle}%
+                    \artcoverspineauthor{11}{12}{\@CoverAuthor}%
+                \end{picture}%
+            }%
         \end{figure}%
         \restoregeometry%
     }
@@ -276,34 +334,36 @@
         \clearpage%
         \thispagestyle{empty}%
         \addtocounter{page}{-1}%
-        \eject \pdfpagewidth=\@CoverWidth \pdfpageheight=\@CoverHeight \@CoverTextWidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
-        \newgeometry{margin=0mm}%
+        \eject \pdfpagewidth=\@CoverScaledWidth \pdfpageheight=\@CoverScaledHeight \textwidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
+        \newgeometry{margin=0mm, layoutwidth=\@CoverScaledWidth, layoutheight=\@CoverScaledHeight}%
         \begin{figure}%
-            \begin{picture}(1,0.70132751)%
-                \setlength\tabcolsep{0pt}%
-                % cover background art
-                \artrecta{}%
-                \artrectb{}%
-                \artrectc{}%
-                \artlogo%
-                % add crop lines
-                \artlines%
-                % cover text
-                % call front cover elements
-                \put(0,0){\includegraphics[width=\unitlength,page=1]{\@CoverArt}}%
-                \artcoverfronttitle{32}{32}{\@CoverTitle}%
-                \artcoverfrontauthor{25.13}{25.13}{\@CoverAuthor}%
-                \artcoverfrontdocumenttype{18}{18}{\@CoverDocumentType}%
-                \artcoverfrontinfo{15}{19.97}{\@CoverInfo}%
-                % call back cover elements
-                \artcoverbackabstractkeywords{10}{13.355}{\@CoverAbstract}{\@CoverKeywords}%
-                \artcoverbackaddressinfo{11.054}{14.68}{\@PGCOMPAddressInfo}%
-                % call spine elements
-                \artcoverspineinstitution{14}{14}%
-                \artcoverspineinfo{12}{12}{\@CoverSpineInfo}%
-                \artcoverspinetitle{11}{11}{\@CoverTitle}%
-                \artcoverspineauthor{12}{12}{\@CoverAuthor}%
-            \end{picture}%
+            \resizebox{\@CoverScaledWidth}{\@CoverScaledHeight}{%
+                \begin{picture}(1,0.70132751)%
+                    \setlength\tabcolsep{0pt}%
+                    % cover background art
+                    \artrecta{}%
+                    \artrectb{}%
+                    \artrectc{}%
+                    \artlogo%
+                    % add crop lines
+                    \artlines%
+                    % cover text
+                    % call front cover elements
+                    \put(0,0){\includegraphics[width=\unitlength,page=1]{\@CoverArt}}%
+                    \artcoverfronttitle{32}{32}{\@CoverTitle}%
+                    \artcoverfrontauthor{24}{25.13}{\@CoverAuthor}%
+                    \artcoverfrontdocumenttype{18}{18}{\@CoverDocumentType}%
+                    \artcoverfrontinfo{15}{20.02}{\@CoverInfo}%
+                    % call back cover elements
+                    \artcoverbackabstractkeywords{10}{13.355}{\@CoverAbstract}{\@CoverKeywords}%
+                    \artcoverbackaddressinfo{11}{14.68}{\@PGCOMPAddressInfo}%
+                    % call spine elements
+                    \artcoverspineinstitution{14}{14}%
+                    \artcoverspineinfo{11}{12}{\@CoverSpineInfo}%
+                    \artcoverspinetitle{11}{11}{\@CoverTitle}%
+                    \artcoverspineauthor{11}{12}{\@CoverAuthor}%
+                \end{picture}%
+            }%
         \end{figure}%
         \restoregeometry%
     }
@@ -316,34 +376,36 @@
         \clearpage%
         \thispagestyle{empty}%
         \addtocounter{page}{-1}%
-        \eject \pdfpagewidth=\@CoverWidth \pdfpageheight=\@CoverHeight \@CoverTextWidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
-        \newgeometry{margin=0mm}%
+        \eject \pdfpagewidth=\@CoverScaledWidth \pdfpageheight=\@CoverScaledHeight \textwidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
+        \newgeometry{margin=0mm, layoutwidth=\@CoverScaledWidth, layoutheight=\@CoverScaledHeight}%
         \begin{figure}%
-            \begin{picture}(1,0.70132751)%
-                \setlength\tabcolsep{0pt}%
-                % cover background art
-                \artrecta{}%
-                \artrectb{}%
-                \artrectc{}%
-                \artlogo%
-                % add crop lines
-                \artlines%
-                % cover text
-                % call front cover elements
-                \put(0,0){\includegraphics[width=\unitlength,page=1]{\@CoverArt}}%
-                \artcoverfronttitle{36}{39.2}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}%
-                \artcoverfrontauthor{25.13}{25.13}{André Brasil Vieira Wyzykowski}%
-                \artcoverfrontdocumenttype{18}{18}{Tese de Doutorado}%
-                \artcoverfrontinfo{15}{19.97}{Universidade Federal da Bahia\\\\Programa de Pós-Graduação em\\Ciência da Computação\\\\Fevereiro | 2022}%
-                % call back cover elements
-                \artcoverbackabstractkeywords{10}{13.355}{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}{}%
-                \artcoverbackaddressinfo{11.054}{14.68}{\@PGCOMPAddressInfo}%
-                % call spine elements
-                \artcoverspineinstitution{14}{1.25}%
-                \artcoverspineinfo{12}{1.25}{DSC | 027 | 2022}%
-                \artcoverspinetitle{11}{1.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}%
-                \artcoverspineauthor{12}{12.8}{André Brasil Vieira Wyzykowski}%
-            \end{picture}%
+            \resizebox{\@CoverScaledWidth}{\@CoverScaledHeight}{%
+                \begin{picture}(1,0.70132751)%
+                    \setlength\tabcolsep{0pt}%
+                    % cover background art
+                    \artrecta{}%
+                    \artrectb{}%
+                    \artrectc{}%
+                    \artlogo%
+                    % add crop lines
+                    \artlines%
+                    % cover text
+                    % call front cover elements
+                    \put(0,0){\includegraphics[width=\unitlength,page=1]{\@CoverArt}}%
+                    \artcoverfronttitle{32}{39.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}%
+                    \artcoverfrontauthor{24}{25.13}{André Brasil Vieira Wyzykowski}%
+                    \artcoverfrontdocumenttype{18}{18}{Tese de Doutorado}%
+                    \artcoverfrontinfo{15}{20.02}{Universidade Federal da Bahia\\\\Programa de Pós-Graduação em\\Ciência da Computação\\\\Fevereiro | 2022}%
+                    % call back cover elements
+                    \artcoverbackabstractkeywords{10}{13.355}{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}{}%
+                    \artcoverbackaddressinfo{11}{14.68}{\@PGCOMPAddressInfo}%
+                    % call spine elements
+                    \artcoverspineinstitution{14}{1.25}%
+                    \artcoverspineinfo{11}{12}{DSC | 027 | 2022}%
+                    \artcoverspinetitle{11}{11.054}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}%
+                    \artcoverspineauthor{11}{12}{André Brasil Vieira Wyzykowski}%
+                \end{picture}%
+            }%
         \end{figure}%
         \restoregeometry%
     }
@@ -356,38 +418,85 @@
         \clearpage%
         \thispagestyle{empty}%
         \addtocounter{page}{-1}%
-        \eject \pdfpagewidth=\@CoverWidth \pdfpageheight=\@CoverHeight \@CoverTextWidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
-        \newgeometry{margin=0mm}%
+        \eject \pdfpagewidth=\@CoverScaledWidth \pdfpageheight=\@CoverScaledHeight \textwidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
+        \newgeometry{margin=0mm, layoutwidth=\@CoverScaledWidth, layoutheight=\@CoverScaledHeight}%
         \begin{figure}%
-            \begin{picture}(1,0.70132751)%
-                \setlength\tabcolsep{0pt}%
-                % call art to comparison
-                \put(0,0){\includegraphics[width=\unitlength,page=1]{covermodel-art-croped-cmyk.pdf}}%
-                % cover background art (over placed)
-                \artrecta[red]{\transparent{0.4}}%
-                \artrectb[red]{\transparent{0.4}}%
-                \artrectc[red]{\transparent{0.4}}%
-                % add crop lines
-                \artlines%
-                % cover text
-                % call front cover elements
-                \artcoverfronttitle[black]{36}{39.2}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}%
-                \artcoverfrontauthor[black]{25.13}{25.13}{André Brasil Vieira Wyzykowski}
-                \artcoverfrontdocumenttype[black]{18}{18}{Tese de Doutorado}%
-                \artcoverfrontinfo[black]{15}{19.97}{Universidade Federal da Bahia\\\\Programa de Pós-Graduação em\\Ciência da Computação\\\\Fevereiro | 2022}%
-                % call back cover elements
-                \artcoverbackabstractkeywords[black]{10}{13.355}{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}{}%
-                \artcoverbackaddressinfo[black]{11.054}{14.68}{\@PGCOMPAddressInfo}%
-                % call spine elements
-                \artcoverspineinstitution[black]{14}{14}%
-                \artcoverspineinfo[black]{12}{12}{DSC | 027 | 2022}%
-                \artcoverspinetitle[black]{11.054}{11.054}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}%
-                \artcoverspineauthor[black]{12}{12}{André Brasil Vieira Wyzykowski}%
-                \artlogo%
-            \end{picture}%
+            \resizebox{\@CoverScaledWidth}{\@CoverScaledHeight}{%
+                \begin{picture}(1,0.70132751)%
+                    \setlength\tabcolsep{0pt}%
+                    % call art to comparison
+                    \put(0,0){\includegraphics[width=\unitlength,page=1]{covermodel-art-croped-cmyk.pdf}}%
+                    % cover background art (over placed)
+                    \artrecta[red]{\transparent{0.4}}%
+                    \artrectb[red]{\transparent{0.4}}%
+                    \artrectc[red]{\transparent{0.4}}%
+                    % add crop lines
+                    \artlines%
+                    % cover text
+                    % call front cover elements
+                    \artcoverfronttitle[black]{32}{39.25}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}%
+                    \artcoverfrontauthor[black]{24}{25.13}{André Brasil Vieira Wyzykowski}
+                    \artcoverfrontdocumenttype[black]{18}{18}{Tese de Doutorado}%
+                    \artcoverfrontinfo[black]{15}{20.02}{Universidade Federal da Bahia\\\\Programa de Pós-Graduação em\\Ciência da Computação\\\\Fevereiro | 2022}%
+                    % call back cover elements
+                    \artcoverbackabstractkeywords[black]{10}{13.355}{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}{}%
+                    \artcoverbackaddressinfo[black]{11}{14.68}{\@PGCOMPAddressInfo}%
+                    % call spine elements
+                    \artcoverspineinstitution[black]{14}{14}%
+                    \artcoverspineinfo[black]{11}{12}{DSC | 027 | 2022}%
+                    \artcoverspinetitle[black]{11}{11.054}{Identity-aware Fingerprint Synthesis using Generative Adversarial Networks}%
+                    \artcoverspineauthor[black]{11}{12}{André Brasil Vieira Wyzykowski}%
+                    \artlogo%
+                \end{picture}%
+            }%
+        \end{figure}%
+        \restoregeometry%
+    }
+}
+
+% cover custom command with all fonts size from original
+\newcommand{\newsketchedcovercomparedoriginal}{%
+    %% cover art with latex
+    {%
+        \clearpage%
+        \thispagestyle{empty}%
+        \addtocounter{page}{-1}%
+        \eject \pdfpagewidth=\@CoverScaledWidth \pdfpageheight=\@CoverScaledHeight \textwidth=\@CoverTextWidth \textheight=\@CoverTextHeight%
+        \newgeometry{margin=0mm, layoutwidth=\@CoverScaledWidth, layoutheight=\@CoverScaledHeight}%
+        \begin{figure}%
+            \resizebox{\@CoverScaledWidth}{\@CoverScaledHeight}{%
+                \begin{picture}(1,0.70132751)%
+                    \setlength\tabcolsep{0pt}%
+                    % call art to comparison
+                    \put(0,0){\includegraphics[width=\unitlength,page=1]{covermodel-art-croped-cmyk.pdf}}%
+                    % cover background art (over placed)
+                    \artrecta[red]{\transparent{0.4}}%
+                    \artrectb[red]{\transparent{0.4}}%
+                    \artrectc[red]{\transparent{0.4}}%
+                    % add crop lines
+                    \artlines%
+                    % cover text           
+                    % call front cover elements
+                    \put(0.59070796,0.57991487){\color{black}\makebox(0,0)[lt]{\fontsize{36}{39.25}\twcenmtfont\selectfont\smash{\begin{tabular}[t]{\@CR{0.73\@CoverTextWidth}}Identity-aware Fingerprint Synthesis using Generative Adversarial Networks\end{tabular}}}}%
+                    \put(0.58607,0.33259119){\color{black}\makebox(0,0)[lt]{\fontsize{25.12}{25.13}\ebrimafont\selectfont\smash{\begin{tabular}[t]{\@CR{0.74\@CoverTextWidth}}André Brasil Vieira Wyzykowski\end{tabular}}}}%
+                    \put(0.58607,0.21391464){\color{black}\makebox(0,0)[lt]{\fontsize{18}{18}\ebrimafont\selectfont\smash{\begin{tabular}[t]{\@CR{0.74\@CoverTextWidth}}Tese de Doutorado\end{tabular}}}}%
+                    \put(0.59070796,0.18218165){\color{black}\makebox(0,0)[lt]{\fontsize{15.05}{20.02}\ebrimafont\selectfont\smash{\begin{tabular}[t]{\@CR{0.73\@CoverTextWidth}}Universidade Federal da Bahia\\\\Programa de Pós-Graduação em\\Ciência da Computação\\\\Fevereiro | 2022\end{tabular}}}}%
+                    % call back cover elements
+                    \put(0.12603759,0.46617283){\color{black}\makebox(0,0)[lt]{\fontsize{10}{13.355}\ebrimafont\selectfont\smash{\begin{tabular}[t]{\@CJ{0.6485\@CoverTextWidth}}\noindent{Today's legal restrictions that protect biometric data privacy are hampering fingerprint recognition research. For instance, all high-resolution fingerprint databases ceased to be publicly available. Besides, there are no hybrid databases that contain high and medium-resolution images on different sensors. Recent works use generative neural networks (GAN) to replicate the distribution of fingerprints in a given training dataset and synthesize new images. However, these methods are troubled with the replication of undesirable visual characteristics and biases (e.g., fingerprint class distribution) from the training dataset and the inability to generate multiple images of the same identity. To address this problem, we present two novel approaches to synthesize fingerprints. The first is a hybrid approach to synthesize realistic, multiresolution and multisensor fingerprints. This approach can generate high and medium-resolution fingerprints on different sensors, maintaining the same identities. The second is a fingerprint generation method divided into two stage: identity generation and acquisition simulation. Unlike previous works, our first stage models fingerprints focusing on identity cues rather than realism, which we achieve by combining class-specific image generation and inpainting-based restoration. In the second stage, we create multiple samples per identity with the combination of sensor modeling (e.g., area, orientation, deformation) and realistic texturing. We favorably compared our synthetic images to the state-of-the-art in terms of biometric recognition performance and seed image quality analysis. Our experiments suggest that the datasets of synthetic images created by our approaches are analogous to an authentic dataset, which can be crucial for researching and developing large-scale biometric systems without incurring major dataset creation costs and privacy-related risks.}\newline{}\end{tabular}}}}%
+                    \put(0.12603759,0.6124423){\color{black}\makebox(0,0)[lt]{\fontsize{11.06}{14.68}\ebrimafont\selectfont\smash{\begin{tabular}[t]{l}\@PGCOMPAddressInfo\end{tabular}}}}%
+                    % call spine elements
+                    \put(0.4950728,0.07637041){\color{black}\rotatebox{-90}{\makebox(0,0)[lt]{\fontsize{14.1}{14}\ebrimafont\selectfont\smash{\begin{tabular}[t]{l}UFBA\end{tabular}}}}}%
+                    \put(0.49782899,0.63889314){\color{black}\rotatebox{-90}{\makebox(0,0)[lt]{\fontsize{12}{12}\ebrimafont\selectfont\smash{\begin{tabular}[t]{l}DSC | 027 | 2022\end{tabular}}}}}%
+                    \put(0.49644488,0.5493505){\color{black}\rotatebox{-90}{\makebox(0,0)[lt]{\fontsize{11.054}{11.054}\ebrimafont\selectfont\smash{\begin{tabular}[t]{\@CM{0.69\@CoverTextWidth}}Identity-aware Fingerprint Synthesis using Generative Adversarial Networks\end{tabular}}}}}%
+                    \put(0.4963,0.20886039){\color{black}\rotatebox{-90}{\makebox(0,0)[lt]{\fontsize{12}{12}\ebrimafont\selectfont\smash{\begin{tabular}[t]{\@CM{0.225\@CoverTextWidth}}André Brasil Vieira Wyzykowski\end{tabular}}}}}%
+                    \artlogo%
+                \end{picture}%
+            }%
         \end{figure}%
         \restoregeometry%
     }
 }
 
 \endinput
+%%
+%% End of file `ufbacoversketch.sty'.
