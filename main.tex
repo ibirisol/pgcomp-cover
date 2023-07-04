@@ -1,6 +1,8 @@
 % An example showing how to use PGCOMP cover package
-\documentclass{article}
+\documentclass[twoside]{book}
 %\usepackage{xcolor}% uncomment it to remove the warning from ufbacover
+%\PassOptionsToPackage{pass,verbose}{geometry}% to keep previous geometry
+\usepackage{geometry}
 \usepackage{ufbacover}
 \usepackage{lipsum}
 
@@ -13,7 +15,7 @@
 \covermonth{Abril}
 \coveryear{2023}
 \coverdocumenttype{Dissertação de Mestrado}
-% overwritten the value from \title 
+% overwritten the value from \title
 \covertitle{Fairness-Oriented Multicast Routing for Distributed Interactive Applications with Computing on the Network Edge}
 % same as \author
 %\coverauthor{Ibirisol Fontes Ferreira}
@@ -23,7 +25,7 @@ Furthermore, the routing that considers latency constraints has obstacles to mer
 
 \begin{document}
 
-%% print PGCOMP cover as first page 
+%% print PGCOMP cover as first page
 \pgcompcover
 
 %% Regular Text

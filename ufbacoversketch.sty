@@ -17,30 +17,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ufbacoversketch}[2023/06/20 v2.1 UFBA Stylized Cover with Sketch Commands]
-%\PassOptionsToPackage[showframe]{geometry} % uncomment it during manual draw
-\RequirePackage{geometry}
-\RequirePackage{graphicx}
-\RequirePackage{color}
-\RequirePackage{array}
-\RequirePackage{ragged2e}
-\RequirePackage{xspace}
 \RequirePackage{kvoptions}
-\RequirePackage{ifthen}
-\PassOptionsToPackage{T1}{fontenc}
-\RequirePackage{fontenc}
-\RequirePackage{transparent}
-\RequirePackage{ebrima}
-\RequirePackage{twcenmt}
-\RequirePackage{montserrat}
-\RequirePackage{noto}
-
-\newcommand\twcenmtfont{\fontfamily{TwCenMT}}
-\newcommand\ebrimafont{\fontfamily{ebrima}}
-\newcommand\montserratfont{\fontfamily{Montserrat-TLF}\fontseries{medium}}
-\newcommand\notofont{\fontfamily{NotoSans-TLF}\fontseries{regular}}
-
-\newcommand\headerfont[2]{\fontsize{#1}{#2}\montserratfont\selectfont}
-\newcommand\bodyfont[2]{\fontsize{#1}{#2}\notofont\selectfont}
 
 % options
 \SetupKeyvalOptions{family=ufbacoversketch,prefix=ufbacoversketch@}
@@ -57,6 +34,50 @@
 \DeclareStringOption[print]{media}[print]% to keep compatibility with ufbathesis.cls
 \DeclareDefaultOption{\PackageWarningNoLine{ufbacover}{Unknown option '\CurrentOption'}}
 \ProcessKeyvalOptions{ufbacoversketch}
+
+% load remain required packages
+%\PassOptionsToPackage{verbose,showframe}{geometry} % uncomment it during manual draw
+\RequirePackage{geometry}
+\RequirePackage{graphicx}
+\RequirePackage{color}
+\RequirePackage{array}
+\RequirePackage{ragged2e}
+\RequirePackage{xspace}
+\RequirePackage{ifthen}
+\PassOptionsToPackage{T1}{fontenc}
+\RequirePackage{fontenc}
+\RequirePackage{transparent}
+\RequirePackage{ebrima}
+\RequirePackage{twcenmt}
+\RequirePackage{montserrat}
+\RequirePackage{noto}
+
+% adapted commands from inkscape
+\providecommand\color[2][]{%
+  \PackageError{ufbacover}{Color is used for the text and cover art, but the package 'color.sty' is not loaded}{Load the package either 'color.sty' or 'xcolor.sty' before'}
+  \renewcommand\color[2][]{}%
+}%
+\providecommand\definecolor[3][]{%
+  \PackageError{ufbacover}{Defined color is used for the text and cover art, but the package 'xcolor.sty' is not loaded}{Load the package 'xcolor.sty' before}%
+  \renewcommand\definecolor[3]{}{}{}%
+}%
+\providecommand\colorbox[2][]{%
+  \PackageError{ufbacover}{Colorbox is used for the text and cover art, but the package 'xcolor.sty' is not loaded}{Load the package 'xcolor.sty' before}%
+  \renewcommand\colorbox[2]{}{}%
+}%
+\providecommand\transparent[1]{%
+  \errmessage{Transparency is used (non-zero) for the cover art, but the package 'transparent.sty' is not loaded}%
+  \renewcommand\transparent[1]{}%
+}%
+\providecommand\Ebrima[1]{%
+  \errmessage{Font Ebrima is used for the cover art, but the package 'ebrima.sty' is not loaded}%
+  \renewcommand\ebrima[1]{}%
+}%
+\providecommand\TwCenMT[1]{%
+  \errmessage{Font Tw Cen TM is used for the cover art, but the package 'TwCenTM.sty' is not loaded}%
+  \renewcommand\TwCenMT[1]{}%
+}%
+\providecommand\rotatebox[2]{#2}%
 
 % init the lengths
 \newlength\@CoverWidth
@@ -88,6 +109,16 @@
 % set default art background when using undrawing version
 \newcommand{\@CoverArt}{\ufbacoversketch@art}
 
+% load original title (TwCenMT) and body (Ebrima) fonts
+\newcommand\twcenmtfont{\fontfamily{TwCenMT}}
+\newcommand\ebrimafont{\fontfamily{ebrima}}
+% load title (MontSerrat) and body (Noto Sans) fonts
+\newcommand\montserratfont{\fontfamily{Montserrat-TLF}\fontseries{medium}}
+\newcommand\notofont{\fontfamily{NotoSans-TLF}\fontseries{regular}}
+% font selection commands
+\newcommand\headerfont[2]{\fontsize{#1}{#2}\montserratfont\selectfont}
+\newcommand\bodyfont[2]{\fontsize{#1}{#2}\notofont\selectfont}
+
 % externalized commands (public)
 \newcommand{\coverart}[1]{\def\@CoverArt{#1}}
 \newcommand{\covertype}[1]{\def\@CoverType{#1}}
@@ -100,33 +131,6 @@
 \newcommand{\coverabstract}[1]{\def\@CoverAbstract{#1}}
 \newcommand{\coverkeywords}[1]{\def\@CoverKeywords{#1}}
 
-% adapted commands from inkscape
-\providecommand\color[2][]{%
-  \PackageError{ufbacover}{Color is used for the text and cover art, but the package 'color.sty' is not loaded}{Load the package either 'color.sty' or 'xcolor.sty' before'}
-  \renewcommand\color[2][]{}%
-}%
-\providecommand\definecolor[3][]{%
-  \PackageError{ufbacover}{Defined color is used for the text and cover art, but the package 'xcolor.sty' is not loaded}{Load the package 'xcolor.sty' before}%
-  \renewcommand\definecolor[3]{}{}{}%
-}%
-\providecommand\colorbox[2][]{%
-  \PackageError{ufbacover}{Colorbox is used for the text and cover art, but the package 'xcolor.sty' is not loaded}{Load the package 'xcolor.sty' before}%
-  \renewcommand\colorbox[2]{}{}%
-}%
-\providecommand\transparent[1]{%
-  \errmessage{Transparency is used (non-zero) for the cover art, but the package 'transparent.sty' is not loaded}%
-  \renewcommand\transparent[1]{}%
-}%
-\providecommand\Ebrima[1]{%
-  \errmessage{Font Ebrima is used for the cover art, but the package 'ebrima.sty' is not loaded}%
-  \renewcommand\ebrima[1]{}%
-}%
-\providecommand\TwCenMT[1]{%
-  \errmessage{Font Tw Cen TM is used for the cover art, but the package 'TwCenTM.sty' is not loaded}%
-  \renewcommand\TwCenMT[1]{}%
-}%
-\providecommand\rotatebox[2]{#2}%
-
 % new commands for betters tabular adjustments
 \newcolumntype{\@CL}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 \newcolumntype{\@CC}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
@@ -134,8 +138,12 @@
 \newcolumntype{\@CR}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 \newcolumntype{\@CJ}[1]{>{\justifying\let\newline\\\arraybackslash}p{#1}}
 
-% setup scaling requirements
-\def\@CoverScrRatio{0.46460674157303367} % ratio 8.27inch(thesis)/17.8inch(cover)
+%% setup scaling requirements
+% init ratio 8.27inch(thesis)/17.8inch(cover)
+% fixed with mm to 595.276(thesis)/1281.26(cover)
+\def\@CoverScrRatio{0.4646597880211667}% A5 (Portrait)
+%\def\@CoverScrRatio{0.6571617002013643}% A4 (Landscape)
+%\def\@CoverScrRatio{0.71}% SRA4
 % check if it has the digital/physical publication
 \ifthenelse{\equal{\@CoverDistributionMedia}{print}}{%
     \relax
