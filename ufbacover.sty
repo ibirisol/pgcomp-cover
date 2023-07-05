@@ -45,9 +45,6 @@
 \RequirePackage{xspace}
 \PassOptionsToPackage{T1}{fontenc}
 \RequirePackage{fontenc}
-\RequirePackage{atbegshi}
-\RequirePackage{afterpage}
-\RequirePackage{multido}
 
 % check required commands availability
 % adapted commands from inkscape
@@ -72,14 +69,6 @@
   \PackageError{ufbacover}{Geometry commands is used for cover layout, but the package 'geometry.sty' is not loaded}{Load the package 'geometry.sty' before}%
   \renewcommand\loadgeometry[1]{}{}%
 }%
-\newcommand{\removepage}[1]{%
-  \def\@drop@this@page{\AtBeginShipoutDiscard}%
-  \multido{\iA=1+1}{#1}{%
-    \expandafter\gdef\expandafter\@drop@this@page\expandafter%
-      {\expandafter\AtBeginShipoutNext\expandafter{\@drop@this@page}}%
-    }%
-  \@drop@this@page%
-}
 
 % init the lengths
 \newlength\@CoverOriginalWidth
@@ -94,9 +83,6 @@
 \newlength\@CoverTextHeight
 \newlength\@CoverScaledTextWidth
 \newlength\@CoverScaledTextHeight
-
-% init counters
-\newcounter{CoverNumbering}
 
 % setup lengths
 % set deafult scale
@@ -137,8 +123,7 @@
     {roman}{}%
     {Roman}{}%
 }[%
-    \PackageWarningNoLine{ufbacover}{Unknown value '\@CoverNumberingStyle' for option 'numberingstyle'}%
-    \renewcommand{\@CoverNumberingStyle}{arabic}%
+    \PackageWarningNoLine{ufbacover}{Unknown value '\@CoverNumberingStyle' for option 'numberingstyle', ensure that the requirement for this numbering has been loaded}%
 ]
 
 
@@ -347,7 +332,7 @@
     \def\@CoverThePage{\thepage}
     %% cover art with latex
     {%
-        \if@openright\cleardoublepage\else\clearpage\fi%
+        \if@twoside\cleardoublepage\else\clearpage\fi%
         \thispagestyle{empty}%
         \pagenumbering{gobble}%
         \eject \pdfpagewidth=\@CoverScaledWidth \pdfpageheight=\@CoverScaledHeight \textwidth=\@CoverScaledTextWidth \textheight=\@CoverScaledTextHeight%
@@ -383,18 +368,9 @@
         % restore geometry to previous state
         \loadgeometry{ufbacover}%
     }
-    \IfStrEq{\@CoverDistributionMedia}{scr}{%
-    % remove next empty page (due bug with external class when using twoside doc)
-        \AtBeginShipoutNext{\AtBeginShipoutDiscard}%
-        {%
-            \if@openright\cleardoublepage\else\clearpage\fi%
-            \thispagestyle{empty}%
-            \newpage%
-            \pagenumbering{\@CoverNumberingStyle}%
-            \setcounter{page}{\@CoverThePage}%
-        }
-    }{%
-        \if@openright\cleardoublepage\else\clearpage\fi%
+    {%
+        % force back the numbering after this page
+        \if@twoside\cleardoublepage\else\clearpage\fi%
         \pagenumbering{\@CoverNumberingStyle}%
         \setcounter{page}{\@CoverThePage}%
     }
