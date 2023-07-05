@@ -32,19 +32,22 @@
 \DeclareStringOption[215.9mm]{textwidth}[8.5in]% from letterpaper
 \DeclareStringOption[279.4mm]{textheight}[11in]% from letterpaper
 \DeclareStringOption[print]{media}[print]% to keep compatibility with ufbathesis.cls
+\DeclareStringOption[arabic]{numberingstyle}[arabic]
 \DeclareDefaultOption{\PackageWarningNoLine{ufbacover}{Unknown option '\CurrentOption'}}
 \ProcessKeyvalOptions{ufbacover}
 
 % load remain required packages
+\RequirePackage{xstring}
 \RequirePackage{graphicx}
 \RequirePackage{color}
 \RequirePackage{array}
 \RequirePackage{ragged2e}
 \RequirePackage{xspace}
-\RequirePackage{ifthen}
 \PassOptionsToPackage{T1}{fontenc}
 \RequirePackage{fontenc}
 \RequirePackage{atbegshi}
+\RequirePackage{afterpage}
+\RequirePackage{multido}
 
 % check required commands availability
 % adapted commands from inkscape
@@ -61,6 +64,22 @@
   \renewcommand\colorbox[2]{}{}%
 }%
 \providecommand\rotatebox[2]{#2}%
+\providecommand\savegeometry[1][]{%
+  \PackageError{ufbacover}{Geometry commands is used for cover layout, but the package 'geometry.sty' is not loaded}{Load the package 'geometry.sty' before}%
+  \renewcommand\savegeometry[1]{}{}%
+}%
+\providecommand\loadgeometry[1][]{%
+  \PackageError{ufbacover}{Geometry commands is used for cover layout, but the package 'geometry.sty' is not loaded}{Load the package 'geometry.sty' before}%
+  \renewcommand\loadgeometry[1]{}{}%
+}%
+\newcommand{\removepage}[1]{%
+  \def\@drop@this@page{\AtBeginShipoutDiscard}%
+  \multido{\iA=1+1}{#1}{%
+    \expandafter\gdef\expandafter\@drop@this@page\expandafter%
+      {\expandafter\AtBeginShipoutNext\expandafter{\@drop@this@page}}%
+    }%
+  \@drop@this@page%
+}
 
 % init the lengths
 \newlength\@CoverOriginalWidth
@@ -75,6 +94,9 @@
 \newlength\@CoverTextHeight
 \newlength\@CoverScaledTextWidth
 \newlength\@CoverScaledTextHeight
+
+% init counters
+\newcounter{CoverNumbering}
 
 % setup lengths
 % set deafult scale
@@ -105,6 +127,20 @@
 \newcommand{\@CoverBackTextSize}{\ufbacover@backtextsize}
 % set default media (predefined shortcut to scaled size)
 \newcommand{\@CoverDistributionMedia}{\ufbacover@media}
+% setup default numbering style
+\newcommand{\@CoverNumberingStyle}{\ufbacover@numberingstyle}
+\IfEqCase{\ufbacover@numberingstyle}{
+    {alph}{}%
+    {Alph}{}%
+    {arabic}{}%
+    {gobble}{}%
+    {roman}{}%
+    {Roman}{}%
+}[%
+    \PackageWarningNoLine{ufbacover}{Unknown value '\@CoverNumberingStyle' for option 'numberingstyle'}%
+    \renewcommand{\@CoverNumberingStyle}{arabic}%
+]
+
 
 % load title (MontSerrat) and body (Noto Sans) fonts
 \newcommand\montserratfont{\fontfamily{Montserrat-TLF}\fontseries{medium}}
@@ -138,11 +174,11 @@
 %\def\@CoverScrRatio{0.6571617002013643}% A4 (Landscape)
 %\def\@CoverScrRatio{0.71}% SRA4
 % check if it has the digital/physical publication
-\ifthenelse{\equal{\@CoverDistributionMedia}{print}}{%
+\IfStrEq{\@CoverDistributionMedia}{print}{%
     \PackageInfo{ufbacover}{Selected print media as expected output, there is not to do\@gobble}%
     \relax%
 }{% else if
-    \ifthenelse{\equal{\@CoverDistributionMedia}{scr}}{%
+    \IfStrEq{\@CoverDistributionMedia}{scr}{%
         \PackageInfo{ufbacover}{Selected 'scr' media as expected output, setting scale as thesis/cover ratio\@gobble}%
         \def\@CoverScale{\@CoverScrRatio}%
     }{% else
@@ -152,7 +188,7 @@
 }
 
 % setup scaled page
-\ifthenelse{\equal{\@CoverScale}{1.0}}{%
+\IfStrEq{\@CoverScale}{1.0}{%
     \relax%
 }{ % else
     \PackageInfo{ufbacover}{Scaling page attributes by proportion of '\@CoverScale'\@gobble}%
@@ -307,10 +343,13 @@
 \newcommand{\pgcompcover}{%
     % save original geometry
     \savegeometry{ufbacover}%
+    % save page number
+    \def\@CoverThePage{\thepage}
     %% cover art with latex
     {%
+        \if@openright\cleardoublepage\else\clearpage\fi%
         \thispagestyle{empty}%
-        \addtocounter{page}{-1}%
+        \pagenumbering{gobble}%
         \eject \pdfpagewidth=\@CoverScaledWidth \pdfpageheight=\@CoverScaledHeight \textwidth=\@CoverScaledTextWidth \textheight=\@CoverScaledTextHeight%
         \newgeometry{margin=0mm, layoutwidth=\@CoverScaledWidth, layoutheight=\@CoverScaledHeight}%
         \begin{figure}%
@@ -344,13 +383,20 @@
         % restore geometry to previous state
         \loadgeometry{ufbacover}%
     }
+    \IfStrEq{\@CoverDistributionMedia}{scr}{%
     % remove next empty page (due bug with external class when using twoside doc)
-    \AtBeginShipoutNext{\AtBeginShipoutDiscard}%
-    {%
-        \null%
-        \thispagestyle{empty}%
-        \addtocounter{page}{-1}%
-        \newpage%
+        \AtBeginShipoutNext{\AtBeginShipoutDiscard}%
+        {%
+            \if@openright\cleardoublepage\else\clearpage\fi%
+            \thispagestyle{empty}%
+            \newpage%
+            \pagenumbering{\@CoverNumberingStyle}%
+            \setcounter{page}{\@CoverThePage}%
+        }
+    }{%
+        \if@openright\cleardoublepage\else\clearpage\fi%
+        \pagenumbering{\@CoverNumberingStyle}%
+        \setcounter{page}{\@CoverThePage}%
     }
 }
 
