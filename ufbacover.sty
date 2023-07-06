@@ -123,7 +123,7 @@
     {roman}{}%
     {Roman}{}%
 }[%
-    \PackageWarningNoLine{ufbacover}{Unknown value '\@CoverNumberingStyle' for option 'numberingstyle', ensure that the requirement for this numbering has been loaded}%
+    \PackageWarningNoLine{ufbacover}{Unknown value '\@CoverNumberingStyle' for option 'numberingstyle'. First, ensure that the requirement for this numbering style has been loaded}%
 ]
 
 
@@ -200,7 +200,11 @@
 \def\@CoverUnitlength{\unitlength}%
 
 % get some variables from global definition
-\gdef\@notdefined{NA}
+\ifx\@notdefined\undefined%
+    \gdef\@notdefined{NA}
+\else
+    \relax
+\fi
 \def\@CoverType{\@notdefined}
 \def\@CoverCode{\@notdefined}
 \def\@CoverMonth{\@notdefined}
@@ -329,12 +333,12 @@
     % save original geometry
     \savegeometry{ufbacover}%
     % save page number
-    \def\@CoverThePage{\thepage}
+    \def\@CoverThePage{\thepage}%
     %% cover art with latex
     {%
         \if@twoside\cleardoublepage\else\clearpage\fi%
         \thispagestyle{empty}%
-        \pagenumbering{gobble}%
+        \pagenumbering{gobble}% remove numbering style
         \eject \pdfpagewidth=\@CoverScaledWidth \pdfpageheight=\@CoverScaledHeight \textwidth=\@CoverScaledTextWidth \textheight=\@CoverScaledTextHeight%
         \newgeometry{margin=0mm, layoutwidth=\@CoverScaledWidth, layoutheight=\@CoverScaledHeight}%
         \begin{figure}%
@@ -368,12 +372,24 @@
         % restore geometry to previous state
         \loadgeometry{ufbacover}%
     }
-    {%
+
+    % apply cleaning by document class
+    \@ifundefined{@chapapp}{% other documents
+        \relax% TODO: deal with page style in the next page 
+    }{% <book|report>
         % force back the numbering after this page
-        \if@twoside\cleardoublepage\else\clearpage\fi%
-        \pagenumbering{\@CoverNumberingStyle}%
-        \setcounter{page}{\@CoverThePage}%
+        % needs book and report compatibility
+        \if@twoside%
+            \cleardoublepage%
+        \else%
+            \clearpage%
+            \newpage\null%
+        \fi%
     }
+
+    \clearpage%
+    \pagenumbering{\@CoverNumberingStyle}%
+    \setcounter{page}{\@CoverThePage}%
 }
 
 \endinput
